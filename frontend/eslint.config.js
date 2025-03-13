@@ -6,9 +6,23 @@ import pluginReact from "eslint-plugin-react";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  {files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"]},
-  {languageOptions: { globals: globals.browser }},
+  {
+    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+  },
+  {
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,
   pluginReact.configs.flat.recommended,
+  {
+    rules: {
+      "react/react-in-jsx-scope": "off", // No need to import React in React 17+
+      "react/prop-types": "off", // Disable prop-types rule (use TypeScript instead)
+      "@typescript-eslint/no-unused-vars": "warn", // Warn about unused variables
+      "prettier/prettier": "error", // Enforce Prettier formatting
+    },
+  },
 ];
