@@ -1,0 +1,45 @@
+# See https://docs.docker.com/engine/reference/builder/#dockerignore-file for more about ignoring files.
+
+# Ignore git directory.
+.git/
+.gitignore
+
+# Ignore bundler config (backend-specific).
+backend/.bundle/
+
+# Ignore all environment files (root or backend-specific).
+.env*
+
+# Ignore all default key files (backend-specific).
+backend/config/master.key
+backend/config/credentials/*.key
+
+# Ignore all logfiles and temp files (backend-specific).
+backend/log/*
+backend/tmp/*
+!backend/log/.keep
+!backend/tmp/.keep
+
+# Ignore pidfiles (backend-specific), but keep the directory.
+backend/tmp/pids/*
+!backend/tmp/pids/.keep
+
+# Ignore storage (uploaded files in development and any SQLite databases) (backend-specific).
+backend/storage/*
+!backend/storage/.keep
+backend/tmp/storage/*
+!backend/tmp/storage/.keep
+
+# Ignore CI service files (root-level .github folder).
+.github/
+
+# Ignore Kamal files (backend-specific).
+backend/config/deploy*.yml
+backend/.kamal/
+
+# Ignore development files (backend-specific, e.g., devcontainers).
+.backend/.devcontainer/
+
+# Ignore Docker-related files at the root.
+.dockerignore
+Dockerfile*

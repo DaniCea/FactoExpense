@@ -1,0 +1,156 @@
+  [1m[35m (168.0ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (3885.0ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (3919.9ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (9.7ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (7.8ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (4.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.6ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[35m (3888.1ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (2.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35m (62.3ms)[0m  [1m[35mDROP DATABASE IF EXISTS `backend_development` /*application='Backend'*/[0m
+  [1m[35m (9.7ms)[0m  [1m[35mDROP DATABASE IF EXISTS `backend_test` /*application='Backend'*/[0m
+  [1m[35m (9.3ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (8.3ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (3.6ms)[0m  [1m[35mDROP TABLE IF EXISTS `tenants` CASCADE /*application='Backend'*/[0m
+  [1m[35m (35.3ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*application='Backend'*/[0m
+  [1m[35m (30.7ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[35m (4.4ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES (20250311232543) /*application='Backend'*/[0m
+  [1m[35m (27.5ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (3.8ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (4.2ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2025-03-13 12:53:31.324408', '2025-03-13 12:53:31.324412') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (5.0ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('schema_sha1', '2d7557f85c932009205079276e2568a9a4b0f052', '2025-03-13 12:53:31.335781', '2025-03-13 12:53:31.335782') /*application='Backend'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35mSQL (0.1ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[35m (3871.0ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (1.8ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35m (59.5ms)[0m  [1m[35mDROP DATABASE IF EXISTS `backend_development` /*application='Backend'*/[0m
+  [1m[35m (12.2ms)[0m  [1m[35mDROP DATABASE IF EXISTS `backend_test` /*application='Backend'*/[0m
+  [1m[35m (13.8ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (18.8ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (6.8ms)[0m  [1m[35mDROP TABLE IF EXISTS `tenants` CASCADE /*application='Backend'*/[0m
+  [1m[35m (33.2ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci /*application='Backend'*/[0m
+  [1m[35m (33.0ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[35m (4.2ms)[0m  [1m[32mINSERT INTO `schema_migrations` (version) VALUES (20250311232543) /*application='Backend'*/[0m
+  [1m[35m (32.5ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (3.8ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (4.3ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2025-03-13 12:55:11.951097', '2025-03-13 12:55:11.951101') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'schema_sha1' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Create (4.9ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('schema_sha1', '2d7557f85c932009205079276e2568a9a4b0f052', '2025-03-13 12:55:11.961684', '2025-03-13 12:55:11.961686') /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+Migrating to CreateTenants (20250313125631)
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (7.6ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (9.9ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (7.0ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (4.0ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.9ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+Migrating to CreateTenants (20250313125631)
+  [1m[35m (1.1ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[35mSQL (1.3ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[35m (2.4ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (6.3ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.6ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.5ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+Migrating to CreateTenants (20250313125631)
+  [1m[35m (0.6ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[35mSQL (1.3ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[35m (4.3ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (8.4ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+Migrating to CreateTenants (20250313125631)
+  [1m[35m (52.9ms)[0m  [1m[35mCREATE TABLE `tenants` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `name` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Create (4.7ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20250313125631') /*application='Backend'*/[0m
+  [1m[35mSQL (0.5ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:09:07 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (1.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (2.4ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 269ms (Views: 3.3ms | ActiveRecord: 2.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:09:13 +0000
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (0.4ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 3ms (Views: 2.4ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:09:13 +0000
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (4.7ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 14ms (Views: 8.5ms | ActiveRecord: 4.7ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:09:13 +0000
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (0.4ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 7ms (Views: 6.5ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+  [1m[35m (8.1ms)[0m  [1m[35mCREATE DATABASE `backend_development` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35m (7.3ms)[0m  [1m[35mCREATE DATABASE `backend_test` DEFAULT CHARACTER SET `utf8mb4` /*application='Backend'*/[0m
+  [1m[35mSQL (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5073945470573576205', 0) /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (5.0ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+  [1m[36mActiveRecord::InternalMetadata Load (2.0ms)[0m  [1m[34mSELECT * FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' ORDER BY `ar_internal_metadata`.`key` ASC LIMIT 1 /*application='Backend'*/[0m
+  [1m[35mSQL (0.4ms)[0m  [1m[34mSELECT RELEASE_LOCK('5073945470573576205') /*application='Backend'*/[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:11:24 +0000
+  [1m[36mActiveRecord::SchemaMigration Load (1.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC /*application='Backend'*/[0m
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (2.4ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 93ms (Views: 2.9ms | ActiveRecord: 2.8ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:11:33 +0000
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (0.5ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 4ms (Views: 3.1ms | ActiveRecord: 0.4ms (1 query, 0 cached) | GC: 0.0ms)
+
+
+Started GET "/tenants" for 172.18.0.1 at 2025-03-13 14:11:33 +0000
+Processing by TenantsController#index as HTML
+  [1m[36mTenant Load (6.3ms)[0m  [1m[34mSELECT `tenants`.* FROM `tenants` /*action='index',application='Backend',controller='tenants'*/[0m
+  ↳ app/controllers/tenants_controller.rb:8:in 'TenantsController#index'
+Completed 200 OK in 14ms (Views: 7.2ms | ActiveRecord: 6.2ms (1 query, 0 cached) | GC: 0.0ms)
+
+
