@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { Routes, Route } from 'react-router';
+
 import { fetchTenants } from "./api";
 import SignInPage from "./pages/SignInPage";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   useEffect(() =>{
     fetchTenants().then((response) => {
       console.log(response);
@@ -15,7 +15,10 @@ function App() {
 
   return (
     <>
-      <SignInPage />
+      <Routes>
+        <Route path="/" element={<SignInPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+      </Routes>
     </>
   )
 }
