@@ -3,4 +3,5 @@ class User < ApplicationRecord
 
   belongs_to :tenant
   validates :tenant, presence: true
+  validates :email, presence: true, uniqueness: true
 end

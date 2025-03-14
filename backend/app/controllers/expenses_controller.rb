@@ -1,9 +1,7 @@
 class ExpensesController < ApplicationController
-  before_action :set_tenant_and_user, only: [:index, :create]
-
   # GET /expenses
   def index
-    expenses = Expense.where(tenant: "1")  # TODO: Get tenant from Auth user, testing purposes
+    expenses = Expense.where(tenant: @current_tenant)
 
     # Filter by status
     if params[:status].present?
@@ -33,8 +31,8 @@ class ExpensesController < ApplicationController
     ActiveRecord::Base.transaction do
       # Create the main expense
       expense = Expense.new(expense_params)
-      expense.tenant = Tenant.find(1) # TODO: Set Auth user tenant
-      expense.user = User.find(1) # TODO: Set Auth user
+      expense.tenant = @current_tenant
+      expense.user = @current_user
 
       # If expense is a TravelExpense, create associated TravelExpense
       if expense.expense_type == "travel"
@@ -90,10 +88,5 @@ class ExpensesController < ApplicationController
   # Strong parameters for MileageExpense
   def mileage_expense_params
     params.require(:mileage_expense).permit(:mileage_km, :amount)
-  end
-
-  # Set the tenant and user based on the current user
-  def set_tenant_and_user
-    @tenant = Tenant.find(1) # TODO: Set Auth user tenant
   end
 end
