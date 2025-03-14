@@ -5,7 +5,8 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :email, null: false
       t.string :password_digest
 
-      t.references :tenant, null: false, foreign_key: true  # This adds the tenant_id column and the foreign key constraint
+      t.references :tenant, null: false, foreign_key: true
+      t.string :role, default: 'employee'
 
       t.timestamps
     end

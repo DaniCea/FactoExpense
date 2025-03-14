@@ -1,4 +1,6 @@
 class ExpensesController < ApplicationController
+  before_action :authorize_admin, only: [:update_status]
+
   # GET /expenses
   def index
     expenses = Expense.where(tenant: @current_tenant)
@@ -68,6 +70,13 @@ class ExpensesController < ApplicationController
   end
 
   private
+
+  # Method to check if the user is an admin
+  def authorize_admin
+    unless @current_user.role == 'admin'
+      render json: { errors: ["Unauthorized action. Admins only."] }, status: :unauthorized
+    end
+  end
 
   def status_param
     params.require(:status)
