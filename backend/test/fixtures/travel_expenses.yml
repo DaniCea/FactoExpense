@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  expense: one
+  sub_type: MyString
+  hotel_name: MyString
+  check_in_date: 2025-03-14
+  check_out_date: 2025-03-14
+  transportation_mode: MyString
+  route: MyString
+
+two:
+  expense: two
+  sub_type: MyString
+  hotel_name: MyString
+  check_in_date: 2025-03-14
+  check_out_date: 2025-03-14
+  transportation_mode: MyString
+  route: MyString
