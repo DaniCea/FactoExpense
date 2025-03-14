@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router';
 
 import { fetchTenants } from "./api";
-import SignInPage from "./pages/SignInPage";
+import { SignInPage, SignUpPage } from "./pages";
 
 function App() {
   useEffect(() =>{
@@ -18,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/" element={<SignInPage />} />
         <Route path="/signin" element={<SignInPage />} />
+        <Route path="/signin" element={<SignUpPage />} />
       </Routes>
     </>
   )
