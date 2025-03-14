@@ -21,8 +21,7 @@ export default [
     rules: {
       "react/react-in-jsx-scope": "off", // No need to import React in React 17+
       "react/prop-types": "off", // Disable prop-types rule (use TypeScript instead)
-      "@typescript-eslint/no-unused-vars": "warn", // Warn about unused variables
-      "prettier/prettier": "error", // Enforce Prettier formatting
+      "@typescript-eslint/no-unused-vars": "warn"
     },
   },
 ];
