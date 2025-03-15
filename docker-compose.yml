@@ -11,7 +11,11 @@ services:
       - "3000:3000"
     volumes:
       - ./backend:/app
-    command: ["dockerize", "-wait", "tcp://db:3306", "-timeout", "30s", "bash", "-c", "bundle install && rails db:create db:migrate && rails server -b 0.0.0.0"]
+    command: [
+      "dockerize", "-wait", "tcp://db:3306", "-timeout", "30s",
+      "bash", "-c",
+      "rm -f tmp/pids/server.pid bundle install && rails db:create db:migrate && rails server -b 0.0.0.0"
+    ]
 
   frontend:
     build: ./frontend
