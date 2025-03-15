@@ -4,9 +4,7 @@ class AuthController < ApplicationController
   # POST /signup
   def signup
     user = User.new(user_params)
-    # Optionally, you can assign a tenant here if needed:
-    # user.tenant = Tenant.find_by(some_identifier: params[:tenant_identifier])
-    user.tenant = Tenant.find(1) # TODO: Think of a way to get this
+    user.tenant = Tenant.find_or_create_by(id: 1, name: "Default Tenant") # TODO: Think of a better way
 
     if user.save
       token = encode_token({ user_id: user.id, tenant_id: user.tenant_id })
@@ -30,12 +28,10 @@ class AuthController < ApplicationController
   private
 
   def user_params
-    # Adjust permitted attributes as needed (e.g., add tenant information if required)
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
   def encode_token(payload)
-    # Encode the payload using your Rails secret key.
     JWT.encode(payload, Rails.application.secret_key_base, 'HS256')
   end
 end
