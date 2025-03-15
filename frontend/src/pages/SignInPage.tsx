@@ -1,12 +1,21 @@
 import { AuthForm } from "../components";
+import { ILoginProps, signIn } from "../api";
 
 function SignInPage() {
-
   const handleSignIn = (formData: FormData) => {
+    const loginProps: ILoginProps = {
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      confirm_password: formData.get("confirm_password") as string
+    }
+
     debugger;
-    console.log(formData.get("email"))
-    console.log(formData.get("password"))
-    console.log(formData.get("confirm-password"))
+
+    signIn(loginProps).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error fetching data: ', error);
+    });
   }
 
   return (
