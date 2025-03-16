@@ -1,18 +1,16 @@
-import * as React from 'react';
 import { Navigate, Outlet } from 'react-router';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
 
-interface AuthOutletProps {
+interface IAuthOutletProps {
   fallbackPath: string;
+  userMustBeAuthenticated?: boolean;
 }
 
-const AuthOutlet: React.FC<AuthOutletProps> = ({ fallbackPath }) => {
-  const isAuthenticated = useIsAuthenticated();
+const AuthOutlet = ({ fallbackPath, userMustBeAuthenticated = true }: IAuthOutletProps) => {
+  const isAuthenticated = useIsAuthenticated()
 
-  debugger;
-
-  if (!isAuthenticated) {
+  if (!isAuthenticated && userMustBeAuthenticated || isAuthenticated && !userMustBeAuthenticated) {
     return <Navigate to={fallbackPath} replace />;
   }
 

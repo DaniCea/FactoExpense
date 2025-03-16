@@ -22,10 +22,9 @@ class AuthController < ApplicationController
 
       cookies[:_auth] = {
         value: token,
-        httponly: true,  # Helps prevent JavaScript access to the cookie
         secure: true,  # Only send over HTTPS in production
         same_site: :none,  # Allow cross-site cookies
-        expires: 1.hour.from_now # Set an expiration time for the cookie
+        expires: 1.week.from_now # Set an expiration time for the cookie
       }
 
       render json: { token: token, user: user.as_json(only: [:id, :name, :email]) }, status: :ok

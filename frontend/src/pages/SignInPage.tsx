@@ -14,25 +14,18 @@ function SignInPage() {
       confirm_password: formData.get("confirm_password") as string
     }
 
-    debugger;
-
     signIn(loginProps).then((response) => {
-      debugger;
       if(signInAuth({
         auth: {
           token: response.data.token,
-          type: 'Bearer'
+          type: 'Bearer',
         },
-        refresh: response.data.refreshToken,
-        userState: response.data.authUserState
+        userState: { user: { email: loginProps.email } }
       })){  // Only when using refreshToken feature
-        debugger;
-        navigate('/home');
+        navigate('/');
       } else {
         throw new Error('Failed to sign in');
       }
-      debugger;
-      console.log(response);
     }).catch((error) => {
       console.error('Error fetching data: ', error);
     });
