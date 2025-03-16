@@ -1,12 +1,23 @@
 import { AuthForm } from "../components";
+import { ISignUpProps, signUp } from "../api";
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
 
 function SignUpPage() {
+  const signIn = useSignIn()
 
   const handleSignUp = (formData: FormData) => {
-    debugger;
-    console.log(formData.get("email"))
-    console.log(formData.get("password"))
-    console.log(formData.get("confirm-password"))
+    const signupProps: ISignUpProps = {
+      name: 'TODO' as string,
+      email: formData.get("email") as string,
+      password: formData.get("password") as string,
+      confirm_password: formData.get("confirm_password") as string
+    }
+
+    signUp(signupProps).then((response) => {
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error fetching data: ', error);
+    });
   }
 
   return (

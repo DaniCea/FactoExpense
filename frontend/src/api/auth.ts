@@ -1,6 +1,4 @@
 import axios from './axiosInstance';
-import useSignIn from 'react-auth-kit/hooks/useSignIn';
-import { useEffect } from "react";
 
 export type ILoginProps = {
   email: string;
@@ -16,30 +14,17 @@ export type ISignUpProps = {
 }
 
 export const signIn = async (loginProps: ILoginProps) => {
-  // const signIn = useSignIn()
-
-  debugger;
-
   try {
-    await axios.post('/signin', loginProps).then((res) => {
-      debugger;
-      if (res.status === 200) {
-        console.log(res);
-      }
-    })
+    return await axios.post('/signin', loginProps);
   } catch (error) {
-    console.error('Error fetching data: ', error);
-    // Handle errors here or throw them to be handled where the function is called
     throw error;
   }
 };
 
-export const signUp = async () => {
+export const signUp = async (signupProps: ISignUpProps) => {
   try {
-    return await axios.get('');
+    return await axios.post('/signup', signupProps)
   } catch (error) {
-    console.error('Error fetching data: ', error);
-    // Handle errors here or throw them to be handled where the function is called
     throw error;
   }
 };

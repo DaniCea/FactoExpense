@@ -19,6 +19,15 @@ class AuthController < ApplicationController
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
       token = encode_token({ user_id: user.id, tenant_id: user.tenant_id })
+
+      cookies[:_auth] = {
+        value: token,
+        httponly: true,  # Helps prevent JavaScript access to the cookie
+        secure: true,  # Only send over HTTPS in production
+        same_site: :off,  # TODO: This is the best?
+        expires: 1.hour.from_now # Set an expiration time for the cookie
+      }
+
       render json: { token: token, user: user.as_json(only: [:id, :name, :email]) }, status: :ok
     else
       render json: { errors: ["Invalid email or password"] }, status: :unauthorized

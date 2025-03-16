@@ -1,7 +1,12 @@
 import { AuthForm } from "../components";
 import { ILoginProps, signIn } from "../api";
+import useSignIn from 'react-auth-kit/hooks/useSignIn';
+import { useNavigate } from "react-router";
 
 function SignInPage() {
+  const signInAuth = useSignIn()
+  const navigate = useNavigate();
+
   const handleSignIn = (formData: FormData) => {
     const loginProps: ILoginProps = {
       email: formData.get("email") as string,
@@ -12,6 +17,21 @@ function SignInPage() {
     debugger;
 
     signIn(loginProps).then((response) => {
+      debugger;
+      if(signInAuth({
+        auth: {
+          token: response.data.token,
+          type: 'Bearer'
+        },
+        refresh: response.data.refreshToken,
+        userState: response.data.authUserState
+      })){  // Only when using refreshToken feature
+        debugger;
+        navigate('/home');
+      } else {
+        throw new Error('Failed to sign in');
+      }
+      debugger;
       console.log(response);
     }).catch((error) => {
       console.error('Error fetching data: ', error);

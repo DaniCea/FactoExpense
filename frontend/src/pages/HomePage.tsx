@@ -1,4 +1,16 @@
+import { useEffect } from "react";
+import { getExpenses } from "../api/expenses";
+
 function HomePage() {
+  useEffect(() =>{
+    getExpenses().then((response) => {
+      debugger;
+      console.log(response);
+    }).catch((error) => {
+      console.error('Error fetching data: ', error);
+    });
+  })
+
   return (
     <div className="max-w-[720px] mx-auto">
       <div className="block mb-4 mx-auto border-b border-slate-300 pb-2 max-w-[360px]">

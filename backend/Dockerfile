@@ -1,13 +1,3 @@
-# syntax=docker/dockerfile:1
-# check=error=true
-
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t backend .
-# docker run -d -p 80:80 -e RAILS_MASTER_KEY=<value from config/master.key> --name backend backend
-
-# For a containerized dev environment, see Dev Containers: https://guides.rubyonrails.org/getting_started_with_devcontainer.html
-
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
 FROM ruby:3.4.2
 
 # Rails app lives here
@@ -15,7 +5,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl default-mysql-client libjemalloc2 libvips && \
+    apt-get install --no-install-recommends -y curl default-mysql-client libjemalloc2 libvips openssl && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install dockerize
@@ -38,22 +28,28 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Copy built artifacts: gems, application
-# COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-# COPY --from=build /rails /rails
+# Generate SSL certificate dynamically
+RUN mkdir -p /rails/config/ssl && \
+    openssl req -x509 -newkey rsa:2048 -keyout /rails/config/ssl/server.key \
+        -out /rails/config/ssl/server.crt -days 365 -nodes -subj "/CN=localhost" && \
+    # Set proper permissions for SSL files
+    chown -R 1000:1000 /rails/config/ssl
 
 # Create necessary directories if they do not exist
 # Run and own only the runtime files as a non-root user for security
-RUN mkdir -p db log storage tmp && \
-    groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+RUN mkdir -p db log storage tmp
+#RUN mkdir -p db log storage tmp && \
+#    groupadd --system --gid 1000 rails && \
+#    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
+#    chown -R rails:rails db log storage tmp
 
 USER 1000:1000
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start server via Thruster by default, this can be overwritten at runtime
-EXPOSE 80
-CMD ["./bin/thrust", "./bin/rails", "server"]
+# Expose HTTPS port
+EXPOSE 443
+
+# Start server with HTTPS enabled
+CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
