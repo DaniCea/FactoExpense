@@ -19,12 +19,6 @@ RUN pnpm install
 # Copy the rest of the application
 COPY . .
 
-# Debug: Ensure directory exists and has correct permissions
-RUN mkdir -p /app/ssl && chmod 777 /app/ssl &&\
-    ls -ld /app/ssl && \
-    touch /app/ssl/testfile.txt && \
-    ls -l /app/ssl
-
 # Generate SSL certificate dynamically for the frontend
 RUN openssl req -x509 -newkey rsa:2048 -keyout /app/ssl/server.key \
         -out /app/ssl/server.crt -days 365 -nodes -subj "/CN=localhost" && \

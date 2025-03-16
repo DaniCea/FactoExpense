@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_user, only: [:signup, :signin]
+  skip_before_action :authenticate_user, only: [:signup, :signin, :test_cookie]
 
   # POST /signup
   def signup
@@ -24,7 +24,7 @@ class AuthController < ApplicationController
         value: token,
         httponly: true,  # Helps prevent JavaScript access to the cookie
         secure: true,  # Only send over HTTPS in production
-        same_site: :off,  # TODO: This is the best?
+        same_site: :none,  # Allow cross-site cookies
         expires: 1.hour.from_now # Set an expiration time for the cookie
       }
 
