@@ -1,5 +1,5 @@
 class AuthController < ApplicationController
-  skip_before_action :authenticate_user, only: [:signup, :signin, :test_cookie]
+  skip_before_action :authenticate_user, only: [:signup, :signin]
 
   # POST /signup
   def signup
@@ -18,7 +18,7 @@ class AuthController < ApplicationController
   def signin
     user = User.find_by(email: params[:email])
     if user && user.authenticate(params[:password])
-      token = encode_token({ user_id: user.id, tenant_id: user.tenant_id })
+      token = encode_token({ user_id: user.id, tenant_id: user.tenant_id, exp: 1.year.from_now.to_i })
 
       cookies[:_auth] = {
         value: token,
