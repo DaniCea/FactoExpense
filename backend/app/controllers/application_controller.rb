@@ -4,8 +4,12 @@ class ApplicationController < ActionController::API
   before_action :authenticate_user
 
   def authenticate_user
-    header = request.headers["Authorization"]
-    token = header.split(" ").last if header.present?
+    token = cookies[:_auth]
+
+    if token.blank?
+      render json: { errors: ["Unauthorized"] }, status: :unauthorized
+      return
+    end
 
     begin
       decoded_token = decode_token(token)

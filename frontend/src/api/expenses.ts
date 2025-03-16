@@ -2,8 +2,7 @@ import axios from './axiosInstance';
 
 export const getExpenses = async () => {
   try {
-    debugger;
-    return await axios.post('/expenses');
+    return await axios.get('/expenses');
   } catch (error) {
     throw error;
   }
