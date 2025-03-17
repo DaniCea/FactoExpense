@@ -23,7 +23,9 @@ export const signIn = async (loginProps: ILoginProps) => {
 
 export const signUp = async (signupProps: ISignUpProps) => {
   try {
-    return await axios.post('/signup', signupProps)
+    return await axios.post('/signup', {
+      user: signupProps
+    })
   } catch (error) {
     throw error;
   }

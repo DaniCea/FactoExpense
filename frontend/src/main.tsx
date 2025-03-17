@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 import AuthProvider from 'react-auth-kit';
 import createStore from 'react-auth-kit/createStore';
 import './index.css'
-import App from './App'
+import Router from './Router'
 
 const store = createStore({
   authName: '_auth',
@@ -17,7 +17,7 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider store={store}>
       <BrowserRouter>
-        <App />
+        <Router />
       </BrowserRouter>
     </AuthProvider>
   </StrictMode>

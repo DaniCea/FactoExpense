@@ -1,27 +1,35 @@
 import { AuthForm } from "../components";
-import { ILoginProps, signIn } from "../api";
+import {ILoginProps, ISignUpProps, signIn, signUp} from "../api";
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from "react-router";
 
-function SignInPage() {
+interface ISigninPageProps {
+  type: 'signin' | 'signup';
+}
+
+function AuthPage({ type }: ISigninPageProps) {
   const signInAuth = useSignIn()
   const navigate = useNavigate();
 
   const handleSignIn = (formData: FormData) => {
-    const loginProps: ILoginProps = {
+    const authProps: ILoginProps | ISignUpProps = {
+      name: formData.get("name") as string,
       email: formData.get("email") as string,
       password: formData.get("password") as string,
       confirm_password: formData.get("confirm_password") as string
     }
 
-    signIn(loginProps).then((response) => {
+    const apiAuthFunction = type === 'signin' ? signIn : signUp;
+
+    apiAuthFunction(authProps).then((response) => {
+      debugger;
       if(signInAuth({
         auth: {
           token: response.data.token,
           type: 'Bearer',
         },
-        userState: { user: { email: loginProps.email } }
-      })){  // Only when using refreshToken feature
+        userState: { user: { email: authProps.email } }
+      })){
         navigate('/');
       } else {
         throw new Error('Failed to sign in');
@@ -34,11 +42,10 @@ function SignInPage() {
   return (
     <section className="bg-gray-50 dark:bg-gray-900">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <h2>SIGN IN</h2>
-        <AuthForm onSubmit={handleSignIn}/>
+        <AuthForm onSubmit={handleSignIn} type={type}/>
       </div>
     </section>
   );
 }
 
-export default SignInPage;
+export default AuthPage;

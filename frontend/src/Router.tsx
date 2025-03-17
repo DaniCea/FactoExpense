@@ -1,9 +1,10 @@
 import { Routes, Route } from 'react-router'
-import { SignInPage, SignUpPage, HomePage } from "./pages";
+import { HomePage } from "./pages";
 
 import AuthOutlet from './AuthOutlet'
+import AuthPage from "./pages/AuthPage";
 
-function App() {
+function Router() {
   return (
     <>
       <Routes>
@@ -11,12 +12,12 @@ function App() {
           <Route path="/" element={<HomePage />} />
         </Route>
         <Route element={<AuthOutlet fallbackPath={'/'} userMustBeAuthenticated={false} />}>
-          <Route path="/signin" element={<SignInPage />} />
-          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="/signin" element={<AuthPage type={'signin'} />} />
+          <Route path="/signup" element={<AuthPage type={'signup'} />} />
         </Route>
       </Routes>
     </>
   )
 }
 
-export default App
+export default Router
