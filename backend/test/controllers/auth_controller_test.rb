@@ -47,7 +47,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
 
   # POST /signin
   test "should sign in a user and return a JWT token" do
-    user = users(:one)
+    user = users(:user_tenant_one)
 
     post signin_url, params: { email: user.email, password: "breakingbad" }
 

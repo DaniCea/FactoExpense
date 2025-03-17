@@ -1,11 +1,11 @@
 one:
   tenant: one
-  user: one
-  status: MyString
-  expense_type: MyString
+  user: user_tenant_one
+  status: "pending"
+  expense_type: "regular"
 
 two:
   tenant: two
-  user: two
-  status: MyString
-  expense_type: MyString
+  user: user_tenant_two
+  status: "accepted"
+  expense_type: "travel"
