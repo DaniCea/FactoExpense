@@ -15,8 +15,8 @@ export default defineConfig({
       usePolling: true
     },
     https: {
-      key: fs.readFileSync(path.resolve('/app', 'ssl', 'server.key')),
-      cert: fs.readFileSync(path.resolve('/app', 'ssl', 'server.crt')),
+      key: fs.readFileSync(path.resolve('/app/config', 'ssl', 'server.key')),
+      cert: fs.readFileSync(path.resolve('/app/config', 'ssl', 'server.crt')),
     }
   }
 })

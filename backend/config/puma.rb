@@ -31,8 +31,8 @@ threads threads_count, threads_count
 port ENV.fetch("PORT", 3000)
 
 # Enable SSL if the key and cert exist
-if File.exist?("config/ssl/server.key") && File.exist?("config/ssl/server.crt")
-  ssl_bind "0.0.0.0", "443", key: "config/ssl/server.key", cert: "config/ssl/server.crt"
+if File.exist?("/app/config/ssl/server.key") && File.exist?("/app/config/ssl/server.crt") # TODO: Set from the environment variable
+  ssl_bind "0.0.0.0", "443", key: "/app/config/ssl/server.key", cert: "/app/config/ssl/server.crt"
   puts "✅ Puma running with SSL on port 443"
 else
   puts "⚠️ SSL certificate or key not found. Running without HTTPS."

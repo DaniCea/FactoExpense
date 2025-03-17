@@ -5,7 +5,7 @@ WORKDIR /rails
 
 # Install base packages
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl default-mysql-client libjemalloc2 libvips ca-certificates libnss3-tools && \
+    apt-get install --no-install-recommends -y curl default-mysql-client libjemalloc2 libvips && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install dockerize
@@ -16,11 +16,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential default-libmysqlclient-dev git libyaml-dev pkg-config && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
-# Install mkcert
-RUN curl -Lo /usr/local/bin/mkcert https://github.com/FiloSottile/mkcert/releases/download/v1.4.4/mkcert-v1.4.4-linux-amd64 && \
-    chmod +x /usr/local/bin/mkcert && \
-    mkcert -install
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -33,11 +28,6 @@ COPY . .
 # Precompile bootsnap code for faster boot times
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Generate trusted SSL certificate dynamically using mkcert
-RUN mkdir -p /rails/config/ssl && \
-    mkcert -key-file /rails/config/ssl/server.key -cert-file /rails/config/ssl/server.crt localhost 127.0.0.1 ::1 && \
-    chown -R 1000:1000 /rails/config/ssl
-
 
 # Create necessary directories if they do not exist
 # Run and own only the runtime files as a non-root user for security
@@ -47,7 +37,7 @@ RUN mkdir -p db log storage tmp
 #    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
 #    chown -R rails:rails db log storage tmp
 
-USER 1000:1000
+# USER 1000:1000
 
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
