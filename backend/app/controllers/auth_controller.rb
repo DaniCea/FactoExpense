@@ -4,10 +4,17 @@ class AuthController < ApplicationController
   # POST /signup
   def signup
     user = User.new(user_params)
-    user.tenant = Tenant.find_or_create_by(id: 1, name: "Default Tenant") # TODO: Think of a better way
+    user.tenant = Tenant.find(1) # Assign the user to the default tenant
 
     if user.save
-      token = encode_token({ user_id: user.id, tenant_id: user.tenant_id })
+      token = encode_token({ user_id: user.id, tenant_id: user.tenant_id, exp: 1.year.from_now.to_i })
+      cookies[:_auth] = {
+        value: token,
+        secure: true,  # Only send over HTTPS in production
+        same_site: :none,  # Allow cross-site cookies
+        expires: 1.week.from_now # Set an expiration time for the cookie
+      }
+
       render json: { token: token, user: user.as_json(only: [:id, :name, :email]) }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
