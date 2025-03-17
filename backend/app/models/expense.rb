@@ -12,7 +12,12 @@ class Expense < ApplicationRecord
     json = super(options)
 
     if expense_type == "travel" && travel_expense.present?
-      json[:travel_expense] = travel_expense.as_json
+      json[:travel_expense] = travel_expense.as_json(options.merge(
+        include: {
+          accommodation_travel_expense: {},
+          transportation_travel_expense: {}
+        }
+      ))
     end
 
     if expense_type == "mileage" && mileage_expense.present?

@@ -13,6 +13,8 @@ const store = createStore({
   cookieSecure: true
 });
 
+// todo: remove strict mode on release
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AuthProvider store={store}>

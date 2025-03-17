@@ -12,7 +12,7 @@ function HomePage() {
     }).catch((error) => {
       console.error('Error fetching data: ', error);
     });
-  })
+  }, [])
 
   return (
     <>

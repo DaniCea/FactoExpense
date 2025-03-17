@@ -20,7 +20,7 @@ class ExpensesController < ApplicationController
     end
 
     # Eager load associations based on the expense type
-    expenses = expenses.includes(:travel_expense, :mileage_expense)
+    expenses = expenses.includes(:travel_expense, :mileage_expense, travel_expense: [:accommodation_travel_expense, :transportation_travel_expense])
 
     # TODO: Add pagination
 

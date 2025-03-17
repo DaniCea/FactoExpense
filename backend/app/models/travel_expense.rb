@@ -1,6 +1,8 @@
 class TravelExpense < ApplicationRecord
   belongs_to :expense
 
-  validates :hotel_name, presence: true, if: -> { sub_type == 'accommodation' }
-  validates :transportation_mode, presence: true, if: -> { sub_type == 'transportation' }
+  has_one :accommodation_travel_expense, dependent: :destroy
+  has_one :transportation_travel_expense, dependent: :destroy
+
+  validates :sub_type, inclusion: { in: %w[accommodation transportation other] }
 end
