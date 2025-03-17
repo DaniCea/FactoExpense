@@ -1,28 +1,23 @@
 import { AuthForm } from "../components";
-import {ILoginProps, ISignUpProps, signIn, signUp} from "../api";
+import { ILoginProps, ISignUpProps, signIn, signUp } from "../api";
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from "react-router";
+import { CenterGreyBackgroundLayout } from "./layouts";
 
 interface ISigninPageProps {
   type: 'signin' | 'signup';
 }
 
 function AuthPage({ type }: ISigninPageProps) {
+  const isSignup = type === 'signup';
   const signInAuth = useSignIn()
   const navigate = useNavigate();
 
-  const handleSignIn = (formData: FormData) => {
-    const authProps: ILoginProps | ISignUpProps = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-      confirm_password: formData.get("confirm_password") as string
-    }
+  const handleAuthSubmit = (authProps: ILoginProps | ISignUpProps) => {
+    const apiAuthFunction = isSignup ? signUp : signIn;
+    const typedAuthProps = isSignup ? authProps as ISignUpProps : authProps as ILoginProps;
 
-    const apiAuthFunction = type === 'signin' ? signIn : signUp;
-
-    apiAuthFunction(authProps).then((response) => {
-      debugger;
+    apiAuthFunction(typedAuthProps).then((response) => {
       if(signInAuth({
         auth: {
           token: response.data.token,
@@ -40,11 +35,12 @@ function AuthPage({ type }: ISigninPageProps) {
   }
 
   return (
-    <section className="bg-gray-50 dark:bg-gray-900">
-      <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <AuthForm onSubmit={handleSignIn} type={type}/>
-      </div>
-    </section>
+    <CenterGreyBackgroundLayout>
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        {isSignup ? "Create an account" : "Sign in"}
+      </h1>
+      <AuthForm onSubmit={handleAuthSubmit} type={type}/>
+    </CenterGreyBackgroundLayout>
   );
 }
 

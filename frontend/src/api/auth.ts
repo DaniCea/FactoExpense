@@ -3,7 +3,6 @@ import axios from './axiosInstance';
 export type ILoginProps = {
   email: string;
   password: string;
-  confirm_password: string;
 }
 
 export type ISignUpProps = {

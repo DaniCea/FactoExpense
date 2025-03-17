@@ -35,6 +35,7 @@ class ExpensesController < ApplicationController
       expense = Expense.new(expense_params)
       expense.tenant = @current_tenant
       expense.user = @current_user
+      expense.status = "pending"
 
       # If expense is a TravelExpense, create associated TravelExpense
       if expense.expense_type == "travel"
@@ -86,7 +87,7 @@ class ExpensesController < ApplicationController
 
   # Strong parameters for expense
   def expense_params
-    params.require(:expense).permit(:expense_type, :status)
+    params.require(:expense).permit(:expense_type, :title, :description, :amount)
   end
 
   # Strong parameters for TravelExpense
@@ -96,6 +97,6 @@ class ExpensesController < ApplicationController
 
   # Strong parameters for MileageExpense
   def mileage_expense_params
-    params.require(:mileage_expense).permit(:mileage_km, :amount)
+    params.require(:mileage_expense).permit(:mileage_km)
   end
 end

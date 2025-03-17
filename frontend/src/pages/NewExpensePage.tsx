@@ -1,17 +1,31 @@
-import { useEffect, useState } from "react";
-import { getExpenses } from "../api/expenses";
-import {AuthForm, ExpenseCard, NavBar, NewExpenseForm} from "../components";
-import * as React from "react";
+import { NavBar, NewExpenseForm } from "../components";
+import { CenterGreyBackgroundLayout } from "./layouts";
+import { ICreateExpenseProps, createExpense } from "../api/expenses";
+import { useNavigate } from "react-router";
 
 function NewExpensePage() {
+  const navigate = useNavigate();
+
+  const handleSubmitNewExpense = (expenseData: ICreateExpenseProps) => {
+    debugger;
+    createExpense(expenseData).then((response) => {
+      console.log(response);
+      debugger;
+      navigate('/');
+    }).catch((error) => {
+      console.error('Error creating expense: ', error);
+    });
+  }
+
   return (
     <>
       <NavBar/>
-      <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <NewExpenseForm />
-        </div>
-      </section>
+      <CenterGreyBackgroundLayout>
+        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+          New Expense
+        </h1>
+        <NewExpenseForm onSubmit={handleSubmitNewExpense}/>
+      </CenterGreyBackgroundLayout>
     </>
   );
 }

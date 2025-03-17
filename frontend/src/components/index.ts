@@ -1,4 +1,4 @@
-export { default as AuthForm } from './AuthForm';
-export { default as NewExpenseForm } from './NewExpenseForm/NewExpenseForm';
+export { default as AuthForm } from './forms/AuthForm';
+export { default as NewExpenseForm } from './forms/NewExpenseForm';
 export { default as NavBar } from './Navbar';
 export { default as ExpenseCard } from './ExpenseCard';

@@ -3,6 +3,7 @@ import { getExpenses } from "../api/expenses";
 import { ExpenseCard, NavBar } from "../components";
 import * as React from "react";
 import { useNavigate } from "react-router";
+import { Button } from "../components/common";
 
 function HomePage() {
   const [expenses, setExpenses] = useState([]);
@@ -23,11 +24,7 @@ function HomePage() {
       <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
           <div className="mb-5">
-            <button type="submit"
-                    onClick={() => navigate('/new-expense')}
-                    className="text-white bg-cyan-600 hover:bg-cyan-700 focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-cyan-600 dark:hover:bg-cyan-700 dark:focus:ring-cyan-800">
-              Create new expense
-            </button>
+            <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
           </div>
           <div className="flex flex-wrap w-full">
             {expenses.map((expense) => (
