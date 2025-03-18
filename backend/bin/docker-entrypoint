@@ -6,9 +6,15 @@ if [ -z "${LD_PRELOAD+x}" ]; then
     export LD_PRELOAD
 fi
 
-# If running the rails server then create or migrate existing database
-if [ "${@: -2:1}" == "./bin/rails" ] && [ "${@: -1:1}" == "server" ]; then
-  ./bin/rails db:prepare
-fi
+echo "⏳ Waiting for MySQL to be ready..."
+dockerize -wait tcp://db:3306 -timeout 60s
+echo "✅ MySQL is ready!"
+
+echo "Creating database..."
+./bin/rails db:create || echo "Database already exists"
+echo "Running database migrations..."
+./bin/rails db:migrate || echo "Database is up to date"
+echo "Seeding database..."
+./bin/rails db:seed || echo "Database is already seeded"
 
 exec "${@}"

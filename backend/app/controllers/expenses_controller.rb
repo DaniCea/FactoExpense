@@ -19,14 +19,25 @@ class ExpensesController < ApplicationController
       expenses = expenses.where('created_at <= ?', Date.parse(params[:to]).end_of_day)
     end
 
-    # Eager load associations based on the expense type
-    expenses = expenses.includes(:expenseable)
+    # Eager load associations
+    # travel_expenses = expenses.includes(expenseable: :travel_expenseable).where(expenseable_type: 'TravelExpense')
+    # other_expenses = expenses.includes(:expenseable).where.not(expenseable_type: 'TravelExpense')
+    # combined_expenses = travel_expenses + other_expenses
+
+    # Manually adjust the response to include `travel_expenseable` for only TravelExpense
+    expenses_with_associations = expenses.map do |expense|
+      if expense.expenseable.is_a?(TravelExpense)
+        expense.as_json(include: { expenseable: { include: :travel_expenseable } })
+      elsif expense.expenseable.is_a?(MileageExpense)
+        expense.as_json(include: { expenseable: {} })
+      else
+        expense.as_json
+      end
+    end
 
     # TODO: Add pagination
 
-    render json: expenses.as_json(
-      include: { expenseable: {} }
-    ), status: :ok
+    render json: expenses_with_associations, status: :ok
   end
 
   # POST /expenses
@@ -34,32 +45,41 @@ class ExpensesController < ApplicationController
     # Start a transaction to ensure data consistency
     ActiveRecord::Base.transaction do
       expenseable = nil
+      travel_expenseable = nil
 
-      if params[:expense_type].to_s.downcase == 'travel'
-        # Create a TravelExpense and populate with required details
-        expenseable = TravelExpense.new(sub_type: params[:sub_type])
-        # If you're creating other details like Accommodation or Transportation, you can add that here.
-        # Example: expenseable.accommodation_travel_expense = AccommodationTravelExpense.new(hotel_name: 'Hotel ABC')
-
-      elsif params[:expense_type].to_s.downcase == 'mileage'
-        # Create a MileageExpense
-        expenseable = MileageExpense.new(mileage_in_km: params[:mileage_in_km])
-      end
-
-      # Create the main expense
       expense = Expense.new(expense_params)
       expense.tenant = @current_tenant
       expense.user = @current_user
       expense.status = "pending"
 
-      # Assign the polymorphic relationship with the expenseable object
+      if params[:travel_expense_type].to_s.downcase == 'accommodation'
+        travel_expenseable = AccommodationTravelExpense.new(
+          hotel_name: params[:hotel_name],
+          check_in_date: params[:check_in_date],
+          check_out_date: params[:check_out_date]
+        )
+
+      elsif params[:travel_expense_type].to_s.downcase == 'transportation'
+        travel_expenseable = TransportationTravelExpense.new(
+          transportation_mode: params[:transportation_mode],
+          route: params[:route]
+        )
+      end
+
+      if params[:expense_type].to_s.downcase == 'travel'
+        expenseable = TravelExpense.new(sub_type: params[:sub_type])
+        expenseable.travel_expenseable = travel_expenseable if travel_expenseable
+
+      elsif params[:expense_type].to_s.downcase == 'mileage'
+        expenseable = MileageExpense.new(mileage_in_km: params[:mileage_in_km])
+        expense.amount = calculate_expense_amount(expenseable) # Simulate price calculation and refresh price
+      end
+
       expense.expenseable = expenseable
 
-      # Save the expense and the associated records
       if expense.save
         render json: expense, status: :created
       else
-        # Rollback transaction if anything fails
         render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
@@ -79,6 +99,12 @@ class ExpensesController < ApplicationController
   end
 
   private
+
+  # Method to simulate the expense amount calculation based on the mileage, ideally this would run in another class or service
+  def calculate_expense_amount(expenseable)
+    rate_per_km = rand(0.20..0.80).round(2) # Simulation of rate per km
+    expenseable.mileage_in_km * rate_per_km
+  end
 
   # Method to check if the user is an admin
   def authorize_admin

@@ -1,8 +1,7 @@
 class TravelExpense < ApplicationRecord
   has_one :expense, as: :expenseable
 
-  has_one :accommodation_travel_expense, dependent: :destroy
-  has_one :transportation_travel_expense, dependent: :destroy
+  belongs_to :travel_expenseable, polymorphic: true, optional: true
 
   validates :sub_type, inclusion: { in: %w[accommodation transportation other] }
 end
