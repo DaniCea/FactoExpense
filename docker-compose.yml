@@ -12,7 +12,7 @@ services:
       - "443:443"
     volumes:
       - ./backend:/app
-      - ./ssl:/app/config/ssl
+      - ./config/ssl:/app/config/ssl
 
   frontend:
     build: ./frontend
@@ -24,7 +24,7 @@ services:
     volumes:
       - ./frontend:/app
       - /app/node_modules
-      - ./ssl:/app/config/ssl
+      - ./config/ssl:/app/config/ssl
     stdin_open: true
     tty: true
     environment:

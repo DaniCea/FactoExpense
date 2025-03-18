@@ -13,7 +13,6 @@ accommodation = AccommodationTravelExpense.create!(
 )
 
 travel_expense_accommodation = TravelExpense.create!(
-  sub_type: 'accommodation',
   travel_expenseable: accommodation
 )
 
@@ -23,12 +22,10 @@ transportation = TransportationTravelExpense.create!(
 )
 
 travel_expense_transportation = TravelExpense.create!(
-  sub_type: 'transportation',
   travel_expenseable: transportation
 )
 
 travel_expense_other = TravelExpense.create!(
-  sub_type: 'other',
   travel_expenseable: nil
 )
 

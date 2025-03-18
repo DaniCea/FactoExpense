@@ -19,11 +19,6 @@ class ExpensesController < ApplicationController
       expenses = expenses.where('created_at <= ?', Date.parse(params[:to]).end_of_day)
     end
 
-    # Eager load associations
-    # travel_expenses = expenses.includes(expenseable: :travel_expenseable).where(expenseable_type: 'TravelExpense')
-    # other_expenses = expenses.includes(:expenseable).where.not(expenseable_type: 'TravelExpense')
-    # combined_expenses = travel_expenses + other_expenses
-
     # Manually adjust the response to include `travel_expenseable` for only TravelExpense
     expenses_with_associations = expenses.map do |expense|
       if expense.expenseable.is_a?(TravelExpense)
@@ -52,30 +47,43 @@ class ExpensesController < ApplicationController
       expense.user = @current_user
       expense.status = "pending"
 
-      if params[:travel_expense_type].to_s.downcase == 'accommodation'
-        travel_expenseable = AccommodationTravelExpense.new(
-          hotel_name: params[:hotel_name],
-          check_in_date: params[:check_in_date],
-          check_out_date: params[:check_out_date]
-        )
+      if params[:expense_type].to_s.downcase == 'travel'
+        if params[:travel_expense_type].to_s.downcase == 'accommodation'
+          travel_expenseable = AccommodationTravelExpense.create!(
+            hotel_name: params[:hotel_name],
+            check_in_date: params[:check_in_date],
+            check_out_date: params[:check_out_date]
+          )
+          puts "Entro en Travel - Accommodation"
+          puts "TravelExpenseable: #{travel_expenseable.inspect}"
+          expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
+          puts "Expenseable: #{expenseable.inspect}"
 
-      elsif params[:travel_expense_type].to_s.downcase == 'transportation'
-        travel_expenseable = TransportationTravelExpense.new(
-          transportation_mode: params[:transportation_mode],
-          route: params[:route]
-        )
+        elsif params[:travel_expense_type].to_s.downcase == 'transportation'
+          travel_expenseable = TransportationTravelExpense.create!(
+            transportation_mode: params[:transportation_mode],
+            route: params[:route]
+          )
+          puts "Entro en Travel - Transportation"
+          puts "TravelExpenseable: #{travel_expenseable.inspect}"
+          expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
+          puts "Expenseable: #{expenseable.inspect}"
+        else
+          puts "Entro en Travel - Other"
+          expenseable = TravelExpense.create!
+          puts "Expenseable: #{expenseable.inspect}"
+        end
       end
 
-      if params[:expense_type].to_s.downcase == 'travel'
-        expenseable = TravelExpense.new(sub_type: params[:sub_type])
-        expenseable.travel_expenseable = travel_expenseable if travel_expenseable
-
-      elsif params[:expense_type].to_s.downcase == 'mileage'
+      if params[:expense_type].to_s.downcase == 'mileage'
         expenseable = MileageExpense.new(mileage_in_km: params[:mileage_in_km])
         expense.amount = calculate_expense_amount(expenseable) # Simulate price calculation and refresh price
       end
 
+      puts " ----  Estamos fuera ----- "
+      puts "Expenseable: #{expenseable.inspect}"
       expense.expenseable = expenseable
+      puts "Expense: #{expenseable.inspect}"
 
       if expense.save
         render json: expense, status: :created
