@@ -1,9 +1,9 @@
 class MileageExpense < ApplicationRecord
-  belongs_to :expense
+  has_one :expense, as: :expenseable
 
   validates :mileage_in_km, numericality: { greater_than_or_equal_to: 0 }
 
-  after_save :calculate_expense_amount
+  # after_save :calculate_expense_amount
 
   private
 

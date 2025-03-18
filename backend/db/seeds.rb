@@ -6,29 +6,8 @@ tenant2 = Tenant.create!(name: 'Tenant 2')
 user = User.create!(name: 'Test tenant 1', email: 'test1@test.com', password: 'test', tenant: tenant)
 user2 = User.create!(name: 'Test tenant 2', email: 'test2@test.com', password: 'test', tenant: tenant2)
 
-# Creating some Expenses
-expense1 = Expense.create!(
-  tenant: tenant,
-  user: user,
-  title: 'Expense 1',
-  description: 'Description 1',
-  amount: 100.0,
-  status: 'pending',
-  expense_type: 'travel'
-)
-
-expense2 = Expense.create!(
-  tenant: tenant,
-  user: user,
-  title: 'Expense 2',
-  description: 'Description 2',
-  amount: 50.0,
-  status: 'accepted',
-  expense_type: 'regular'
-)
 
 travel_expense1 = TravelExpense.create!(
-  expense: expense1,
   sub_type: 'accommodation'
 )
 
@@ -40,7 +19,6 @@ AccommodationTravelExpense.create!(
 )
 
 travel_expense2 = TravelExpense.create!(
-  expense: expense1,
   sub_type: 'transportation'
 )
 
@@ -51,8 +29,38 @@ TransportationTravelExpense.create!(
 )
 
 mileage_expense = MileageExpense.create!(
-  expense: expense2,
   mileage_in_km: 120.5
 )
+
+Expense.create!(
+  tenant: tenant,
+  user: user,
+  title: 'Travel Expense 1',
+  description: 'Should have travel data associated',
+  amount: 100.0,
+  status: 'pending',
+  expenseable: travel_expense1
+)
+
+Expense.create!(
+  tenant: tenant,
+  user: user,
+  title: 'Mileage Expense 1',
+  description: 'Should have mileage data associated',
+  amount: 50.0,
+  status: 'accepted',
+  expenseable: mileage_expense
+)
+
+Expense.create!(
+  tenant: tenant,
+  user: user,
+  title: 'Regular Expense',
+  description: 'No extra data associated',
+  amount: 50.0,
+  status: 'accepted',
+  expenseable: nil
+)
+
 
 puts "Seed data created successfully!"
