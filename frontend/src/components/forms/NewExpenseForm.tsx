@@ -7,8 +7,20 @@ export type IProps = {
   onSubmit: (formData: Record<string, string>) => void;
 };
 
+const emptyFormData = {
+  title: "",
+  description: "",
+  amount: "",
+  mileage_in_km: "",
+  hotel_name: "",
+  check_in_date: "",
+  check_out_date: "",
+  transportation_mode: "",
+  route: ""
+}
+
 export default function NewExpenseForm({ onSubmit }) {
-  const [formData, setFormData] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<Record<string, string>>(emptyFormData);
 
   const [expenseType, setExpenseType] = useState("");
   const [travelExpenseType, setTravelExpenseType] = useState("");
@@ -17,16 +29,44 @@ export default function NewExpenseForm({ onSubmit }) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onSubmit({ ...formData, expense_type: expenseType });
+  const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setExpenseType(e.target.value);
+    setTravelExpenseType("");
+
+    setFormData(emptyFormData);
   };
 
-  const shouldRenderTitleDescriptionAmount =
+  const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setTravelExpenseType(e.target.value);
+    setFormData(emptyFormData);
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    // RRemove keys with empty string values
+    const cleanedFormData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => value !== "" && value !== undefined)
+    );
+
+    debugger;
+
+    onSubmit({ ...cleanedFormData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
+  };
+
+  const shouldRenderCommonFields =
     (expenseType === "regular" || expenseType === "mileage") ||
     (expenseType === "travel" && travelExpenseType);
 
-  const shouldRenderButton = shouldRenderTitleDescriptionAmount && formData.title && formData.amount;
+  const shouldRenderAmountField = shouldRenderCommonFields && expenseType !== "mileage";
+
+  const shouldRenderMileageFields = expenseType === "mileage";
+
+  const shouldRenderAcommodationFields = expenseType === "travel" && travelExpenseType === "accommodation";
+
+  const shouldRenderTransportationFields = expenseType === "travel" && travelExpenseType === "transportation";
+
+  const shouldRenderButton = (shouldRenderCommonFields && !shouldRenderMileageFields) || shouldRenderMileageFields;
 
   return (
     <form onSubmit={handleSubmit}>
@@ -34,7 +74,7 @@ export default function NewExpenseForm({ onSubmit }) {
         <Selector
           label="Expense type"
           value={expenseType}
-          onChange={(e) => setExpenseType(e.target.value)}
+          onChange={handleExpenseTypeChange}
           id="expense_type"
           placeholder="Select an expense type"
           options={["regular", "travel", "mileage"]}
@@ -46,7 +86,7 @@ export default function NewExpenseForm({ onSubmit }) {
           <Selector
             label="Travel expense type"
             value={travelExpenseType}
-            onChange={(e) => setTravelExpenseType(e.target.value)}
+            onChange={handleTravelExpenseTypeChange}
             id="travel_expense_type"
             placeholder="Select travel expense type"
             options={["accommodation", "transportation", "other"]}
@@ -54,7 +94,7 @@ export default function NewExpenseForm({ onSubmit }) {
         </div>
       )}
 
-      {shouldRenderTitleDescriptionAmount && (
+      {shouldRenderCommonFields && (
         <>
           <div className="mb-5">
             <Input label='Title' name='title' id='title' placeholder="Title" value={formData.title} onChange={handleChange} />
@@ -62,10 +102,44 @@ export default function NewExpenseForm({ onSubmit }) {
           <div className="mb-5">
             <Input label='Description' name='description' id='description' placeholder="Description (optional)" value={formData.description} onChange={handleChange} />
           </div>
+        </>
+      )}
+
+      { shouldRenderAmountField && (
+        <div className="mb-5">
+          <Input type="number" min="0.00" step="0.01" label='Amount' name='amount' id='amount' placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
+        </div>
+      )}
+
+      { shouldRenderAcommodationFields && (
+        <>
           <div className="mb-5">
-            <Input type="number" min="0.00" step="0.01" label='Amount' name='amount' id='amount' placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
+            <Input label='Hotel Name' name='hotel_name' id='hotel_name' placeholder="Hotel Name" value={formData.hotel_name} onChange={handleChange} />
+          </div>
+          <div className="mb-5">
+            <Input type="date" max={new Date().toISOString().split('T')[0]} label='Check-in Date' name='check_in_date' id='check_in_date' placeholder="Check-in Date" value={formData.check_in_date} onChange={handleChange} />
+          </div>
+          <div className="mb-5">
+            <Input type="date" max={new Date().toISOString().split('T')[0]} label='Check-Out Date' name='check_out_date' id='check_out_date' placeholder="Check-out Date" value={formData.check_out_date} onChange={handleChange} />
           </div>
         </>
+      )}
+
+      { shouldRenderTransportationFields && (
+        <>
+          <div className="mb-5">
+            <Input label='Transportation mode' name='transportation_mode' id='transportation_mode' placeholder="Transportation Mode" value={formData.transportation_mode} onChange={handleChange} />
+          </div>
+          <div className="mb-5">
+            <Input label='Route' name='route' id='route' placeholder="Route" value={formData.route} onChange={handleChange} />
+          </div>
+        </>
+      )}
+
+      { shouldRenderMileageFields && (
+        <div className="mb-5">
+          <Input type="number" min="0" label='Mileage (KM)' name='mileage_in_km' id='mileage_in_km' placeholder="Mileage (KM)" value={formData.mileage_in_km} onChange={handleChange} />
+        </div>
       )}
 
       {shouldRenderButton && (
