@@ -21,7 +21,7 @@ class ExpensesController < ApplicationController
 
     # TODO: Add pagination
 
-    render json: expenses, each_serializer: ExpenseSerializer, status: :ok
+    render json: expenses, include: "**", each_serializer: ExpenseSerializer, status: :ok
   end
 
   # POST /expenses

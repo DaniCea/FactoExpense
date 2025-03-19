@@ -42,6 +42,9 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
           <p className="text-sm text-gray-500 truncate dark:text-gray-400">
             { expense.description }
           </p>
+          <p className="text-sm text-gray-500 truncate dark:text-gray-400">
+            { expense.created_at }
+          </p>
         </div>
         <div className="flex justify-end">
           <div className="mr-3 min-w-[100px] text-center text-gray-900 dark:text-white">
