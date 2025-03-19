@@ -43,24 +43,16 @@ class ExpensesController < ApplicationController
             check_in_date: params[:check_in_date],
             check_out_date: params[:check_out_date]
           )
-          puts "Entro en Travel - Accommodation"
-          puts "TravelExpenseable: #{travel_expenseable.inspect}"
           expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
-          puts "Expenseable: #{expenseable.inspect}"
 
         elsif params[:travel_expense_type].to_s.downcase == 'transportation'
           travel_expenseable = TransportationTravelExpense.create!(
             transportation_mode: params[:transportation_mode],
             route: params[:route]
           )
-          puts "Entro en Travel - Transportation"
-          puts "TravelExpenseable: #{travel_expenseable.inspect}"
           expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
-          puts "Expenseable: #{expenseable.inspect}"
         else
-          puts "Entro en Travel - Other"
           expenseable = TravelExpense.create!
-          puts "Expenseable: #{expenseable.inspect}"
         end
       end
 
@@ -69,10 +61,7 @@ class ExpensesController < ApplicationController
         expense.amount = calculate_expense_amount(expenseable) # Simulate price calculation and refresh price
       end
 
-      puts " ----  Estamos fuera ----- "
-      puts "Expenseable: #{expenseable.inspect}"
       expense.expenseable = expenseable
-      puts "Expense: #{expenseable.inspect}"
 
       if expense.save
         render json: expense, status: :created
