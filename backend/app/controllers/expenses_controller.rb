@@ -19,20 +19,9 @@ class ExpensesController < ApplicationController
       expenses = expenses.where('created_at <= ?', Date.parse(params[:to]).end_of_day)
     end
 
-    # Manually adjust the response to include `travel_expenseable` for only TravelExpense
-    expenses_with_associations = expenses.map do |expense|
-      if expense.expenseable.is_a?(TravelExpense)
-        expense.as_json(include: { expenseable: { include: :travel_expenseable } })
-      elsif expense.expenseable.is_a?(MileageExpense)
-        expense.as_json(include: { expenseable: {} })
-      else
-        expense.as_json
-      end
-    end
-
     # TODO: Add pagination
 
-    render json: expenses_with_associations, status: :ok
+    render json: expenses, each_serializer: ExpenseSerializer, status: :ok
   end
 
   # POST /expenses

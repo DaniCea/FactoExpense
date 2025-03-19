@@ -15,7 +15,7 @@ class AuthController < ApplicationController
         expires: 1.week.from_now # Set an expiration time for the cookie
       }
 
-      render json: { token: token, user: user.as_json(only: [:id, :name, :email]) }, status: :created
+      render json: { token: token, user: user }, status: :created
     else
       render json: { errors: user.errors.full_messages }, status: :unprocessable_entity
     end
@@ -34,7 +34,7 @@ class AuthController < ApplicationController
         expires: 1.week.from_now # Set an expiration time for the cookie
       }
 
-      render json: { token: token, user: user.as_json(only: [:id, :name, :email]) }, status: :ok
+      render json: { token: token, user: user }, status: :ok
     else
       render json: { errors: ["Invalid email or password"] }, status: :unauthorized
     end
