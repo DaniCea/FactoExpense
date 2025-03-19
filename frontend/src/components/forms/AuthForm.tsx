@@ -1,9 +1,11 @@
 import { useState } from "react";
 import * as React from "react";
 import { Button, Input } from "../common";
+import {ILoginProps, ISignUpProps, signIn, signUp} from "../../api";
+import { AxiosResponse } from "axios";
 
 export type IProps = {
-  onSubmit: (formData: Record<string, string>) => void;
+  onSubmit: (response: AxiosResponse<any, any>) => void
   type: "signin" | "signup";
 };
 
@@ -24,13 +26,37 @@ export default function AuthForm({ onSubmit, type }: IProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const apiAuthFunction = isSignup ? signUp : signIn;
 
-    if (isSignup && formData.password !== formData.confirm_password) {
-      setError("Passwords do not match!");
+    if (isSignup && (!formData.name || !formData.email || !formData.password || !formData.confirm_password)) {
+      setError("All fields are required");
+      return
+    }
+
+    if (!formData.email || !formData.password) {
+      setError("Email and password are required");
       return;
     }
 
-    onSubmit(formData);
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailRegex.test(formData.email)) {
+      setError("Invalid email address");
+      return;
+    }
+
+    if (isSignup && formData.password !== formData.confirm_password) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    const typedAuthProps = isSignup ? formData as ISignUpProps : formData as ILoginProps;
+    apiAuthFunction(typedAuthProps).then((response) => {
+      onSubmit(response);
+    }).catch((error) => {
+      setError(error.response.data.errors[0]);
+      return;
+      console.error('Error fetching data: ', error.response.data.errors[0]);
+    });
   };
 
   const switchFormSection = () => {

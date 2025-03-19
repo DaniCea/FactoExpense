@@ -37,9 +37,9 @@ function HomePage() {
     <>
       <NavBar />
       <section className="bg-gray-50 dark:bg-gray-900">
-        <div className="flex flex-col px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="mb-5">
-            <div className="mb-5">
+        <div className="px-6 py-8 mx-auto h-screen mb-5">
+          <div className="grid grid-cols-4 gap-4">
+            <div className="">
               <Selector
                 label="Status"
                 name="status"
@@ -50,13 +50,15 @@ function HomePage() {
                 options={["pending", "accepted", "rejected"]}
               />
             </div>
-            <div className="mb-5">
+            <div className="">
               <Input type="date" max={new Date().toISOString().split('T')[0]} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleChange} />
             </div>
-            <div className="mb-5">
+            <div className="">
               <Input type="date" max={new Date().toISOString().split('T')[0]} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleChange} />
             </div>
-            <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
+            <div className="">
+              <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
+            </div>
           </div>
           <div className="w-full">
             <ExpenseList expenses={expenses}></ExpenseList>
