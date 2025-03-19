@@ -9,13 +9,8 @@ interface IExpenseListProps {
 export default function ExpenseList({ expenses }: IExpenseListProps) {
   const userAuth = useAuthUser();
 
-  console.log(userAuth);
-  console.log(userAuth.user.role === "admin");
-
   const handleChange = (expenseId: string, status: string) => {
-    console.log(status);
     updateExpenseStatus({expenseId, status}).then((response) => {
-      debugger;
       console.log(response)
     }).catch((error) => {
       console.error('Error updating status: ', error);
@@ -25,7 +20,7 @@ export default function ExpenseList({ expenses }: IExpenseListProps) {
   console.log(expenses);
 
   return (
-    <ul className="max-w divide-y divide-gray-200 dark:divide-gray-700">
+    <ul className="max-w divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto">
       {expenses.map((expense) => (
         <ExpenseListElement key={expense.id} expense={expense} shouldEditStatus={userAuth.user.role === "admin"} onChange={handleChange}/>
       ))}

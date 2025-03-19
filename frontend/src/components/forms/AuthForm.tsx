@@ -21,6 +21,7 @@ export default function AuthForm({ onSubmit, type }: IProps) {
   const isSignup = type === "signup";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -54,8 +55,8 @@ export default function AuthForm({ onSubmit, type }: IProps) {
       onSubmit(response);
     }).catch((error) => {
       setError(error.response.data.errors[0]);
-      return;
       console.error('Error fetching data: ', error.response.data.errors[0]);
+      return;
     });
   };
 

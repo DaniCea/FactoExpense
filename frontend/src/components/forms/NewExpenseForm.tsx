@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Selector, Input } from "../common";
 import { Button } from "../common";
 import { ChangeEvent, FormEvent } from "react";
+import * as React from "react";
 
 export type IProps = {
   onSubmit: (formData: Record<string, string>) => void;
@@ -21,15 +22,18 @@ const emptyFormData = {
 
 export default function NewExpenseForm({ onSubmit }) {
   const [formData, setFormData] = useState<Record<string, string>>(emptyFormData);
+  const [error, setError] = useState<string | null>(null);
 
   const [expenseType, setExpenseType] = useState("");
   const [travelExpenseType, setTravelExpenseType] = useState("");
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setError(null);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setError(null);
     setExpenseType(e.target.value);
     setTravelExpenseType("");
 
@@ -37,6 +41,7 @@ export default function NewExpenseForm({ onSubmit }) {
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setError(null);
     setTravelExpenseType(e.target.value);
     setFormData(emptyFormData);
   };
@@ -44,12 +49,33 @@ export default function NewExpenseForm({ onSubmit }) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // RRemove keys with empty string values
+    // Remove keys with empty string values
     const cleanedFormData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => value !== "" && value !== undefined)
     );
 
-    debugger;
+    // Validation
+    if (!expenseType) {
+      setError("Please select an expense type");
+      return;
+    }
+
+    if (expenseType === "travel" && !travelExpenseType) {
+      setError("Please select a travel expense type");
+      return;
+    }
+
+    if (!cleanedFormData.title) {
+      setError("Title is required");
+      return;
+    }
+
+    if (expenseType !== "mileage" && !cleanedFormData.amount) {
+      setError("Amount is required");
+      return
+    }
+
+
 
     onSubmit({ ...cleanedFormData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
   };
@@ -149,6 +175,7 @@ export default function NewExpenseForm({ onSubmit }) {
         >
         </Button>
       )}
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </form>
   );
 }

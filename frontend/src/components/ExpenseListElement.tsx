@@ -44,25 +44,25 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
           </p>
         </div>
         <div className="flex justify-end">
-          <div className="mr-3 font-semibold text-gray-900 dark:text-white">
-            { expense.amount } $
+          <div className="mr-3 min-w-[100px] text-center text-gray-900 dark:text-white">
+            <div className="text-xl font-semibold">{ expense.amount } $</div>
+            { shouldEditStatus && (
+              <div className="mb-3 min-w-[100px] text-center ">
+                <Selector
+                  value={status}
+                  onChange={handleStatusChange}
+                  id="expense_type"
+                  options={["pending", "accepted", "rejected"]}
+                  displayOptions={["Pending ⏳", "Accepted ✅", "Rejected ❌"]}
+                />
+              </div>
+            )}
+            { !shouldEditStatus && (
+              <div className="min-w-[100px] ">
+                { expense.status[0].toUpperCase() + expense.status.slice(1) } { generateStatusIcon() }
+              </div>
+            )}
           </div>
-          { shouldEditStatus && (
-            <div className="mr-3 font-semibold text-gray-900 dark:text-white">
-              <Selector
-                value={status}
-                onChange={handleStatusChange}
-                id="expense_type"
-                options={["pending", "accepted", "rejected"]}
-                displayOptions={["⏳ Pending", "✅ Accepted", "❌ Rejected"]}
-              />
-            </div>
-          )}
-          { !shouldEditStatus && (
-            <div className="font-semibold text-gray-900 dark:text-white">
-              { generateStatusIcon() }{ expense.status[0].toUpperCase() + expense.status.slice(1) }
-            </div>
-          )}
         </div>
       </div>
     </li>
