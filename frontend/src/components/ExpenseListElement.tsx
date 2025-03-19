@@ -1,17 +1,40 @@
 import Plane from "../icons/plane";
+import Hotel from "../icons/hotel";
+import { Selector } from "./common";
+import { useState } from "react";
 
 interface IExpenseListProps {
   expense: any;
+  defaultStatus?: string;
+  shouldEditStatus?: boolean;
 }
 
-export default function ExpenseListElement({ expense }: IExpenseListProps) {
+export default function ExpenseListElement({ expense, defaultStatus = "pending", shouldEditStatus = true }: IExpenseListProps) {
+  const [status, setStatus] = useState(defaultStatus);
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setStatus(e.target.value);
+  }
+
+  const generateStatusIcon = () => {
+    if (expense.status === 'pending') {
+      return '⏳'
+    } else if (expense.status === 'accepted') {
+      return '✅'
+    } else if (expense.status === 'rejected') {
+      return '❌'
+    } else {
+      return '❓'
+    }
+  }
+
   return (
     <li className="pb-3 pt-3" key={expense.id}>
       <div className="flex items-center space-x-4 rtl:space-x-reverse">
         <div className="shrink-0">
           <Plane />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-auto">
           <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
             { expense.title }
           </p>
@@ -19,8 +42,26 @@ export default function ExpenseListElement({ expense }: IExpenseListProps) {
             { expense.description }
           </p>
         </div>
-        <div className="inline-flex items-center text-base font-semibold text-gray-900 dark:text-white">
-          { expense.amount }$
+        <div className="flex justify-end">
+          <div className="mr-3 font-semibold text-gray-900 dark:text-white">
+            { expense.amount } $
+          </div>
+          {shouldEditStatus && (
+            <div className="mr-3 font-semibold text-gray-900 dark:text-white">
+              <Selector
+                value={status}
+                onChange={handleStatusChange}
+                id="expense_type"
+                options={["pending", "accepted", "rejected"]}
+                displayOptions={["⏳ Pending", "✅ Accepted", "❌ Rejected"]}
+              />
+            </div>
+          )}
+          { !shouldEditStatus && (
+            <div className="font-semibold text-gray-900 dark:text-white">
+              { generateStatusIcon() }{ expense.status[0].toUpperCase() + expense.status.slice(1) }
+            </div>
+          )}
         </div>
       </div>
     </li>

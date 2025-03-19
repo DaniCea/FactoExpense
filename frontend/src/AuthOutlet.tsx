@@ -1,7 +1,6 @@
 import { Navigate, Outlet } from 'react-router';
 import useIsAuthenticated from 'react-auth-kit/hooks/useIsAuthenticated';
 
-
 interface IAuthOutletProps {
   fallbackPath: string;
   userMustBeAuthenticated?: boolean;

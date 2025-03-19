@@ -23,7 +23,7 @@ function AuthPage({ type }: ISigninPageProps) {
           token: response.data.token,
           type: 'Bearer',
         },
-        userState: { user: { email: authProps.email } }
+        userState: { user: { email: authProps.email, role: response.data.user.role } }
       })){
         navigate('/');
       } else {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import { getExpenses } from "../api/expenses";
 import { NavBar } from "../components";
 import * as React from "react";
@@ -7,7 +8,10 @@ import {Button, Input, Selector} from "../components/common";
 import ExpenseList from "../components/ExpenseList";
 
 function HomePage() {
+  const authUser = useAuthUser()
   const [expenses, setExpenses] = useState([]);
+
+  console.log(authUser);
 
   const [filters, setFilters] = useState({
     status: null,
@@ -54,7 +58,7 @@ function HomePage() {
             </div>
             <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
           </div>
-          <div className="flex flex-wrap w-full">
+          <div className="w-full">
             <ExpenseList expenses={expenses}></ExpenseList>
           </div>
         </div>
