@@ -26,50 +26,19 @@ class ExpensesController < ApplicationController
 
   # POST /expenses
   def create
-    # Start a transaction to ensure data consistency
+    expense = nil
+
     ActiveRecord::Base.transaction do
-      expenseable = nil
-      travel_expenseable = nil
+      expense = ExpenseFactory.build(params, @current_tenant, @current_user)
+      expense.amount = calculate_expense_amount(expense.expenseable) if expense.expenseable.is_a?(MileageExpense)
 
-      expense = Expense.new(expense_params)
-      expense.tenant = @current_tenant
-      expense.user = @current_user
-      expense.status = "pending"
-
-      if params[:expense_type].to_s.downcase == 'travel'
-        if params[:travel_expense_type].to_s.downcase == 'accommodation'
-          travel_expenseable = AccommodationTravelExpense.create!(
-            hotel_name: params[:hotel_name],
-            check_in_date: params[:check_in_date],
-            check_out_date: params[:check_out_date]
-          )
-          expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
-
-        elsif params[:travel_expense_type].to_s.downcase == 'transportation'
-          travel_expenseable = TransportationTravelExpense.create!(
-            transportation_mode: params[:transportation_mode],
-            route: params[:route]
-          )
-          expenseable = TravelExpense.create!(travel_expenseable: travel_expenseable)
-        else
-          expenseable = TravelExpense.create!
-        end
-      end
-
-      if params[:expense_type].to_s.downcase == 'mileage'
-        expenseable = MileageExpense.new(mileage_in_km: params[:mileage_in_km])
-        expense.amount = calculate_expense_amount(expenseable) # Simulate price calculation and refresh price
-      end
-
-      expense.expenseable = expenseable
-
-      if expense.save
-        render json: expense, status: :created
-      else
+      unless expense.save
         render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
     end
+
+    render json: expense, serializer: ExpenseSerializer, include: "**", status: :created
   end
 
   # PATCH /expenses/:id/status
@@ -95,7 +64,7 @@ class ExpensesController < ApplicationController
   # Method to check if the user is an admin
   def authorize_admin
     unless @current_user.role == 'admin'
-      render json: { errors: ["Unauthorized action. Admins only."] }, status: :unauthorized
+      render json: { errors: [ "Unauthorized action. Admins only." ] }, status: :unauthorized
     end
   end
 
@@ -114,5 +83,4 @@ class ExpensesController < ApplicationController
   def travel_expense_params
     params.require(:travel_expense).permit(:sub_type, :hotel_name, :check_in_date, :check_out_date, :transportation_mode, :route)
   end
-
 end
