@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import useAuthUser from 'react-auth-kit/hooks/useAuthUser'
 import { getExpenses } from "../api/expenses";
 import { NavBar } from "../components";
 import * as React from "react";
@@ -8,10 +7,7 @@ import {Button, Input, Selector} from "../components/common";
 import ExpenseList from "../components/ExpenseList";
 
 function HomePage() {
-  const authUser = useAuthUser()
   const [expenses, setExpenses] = useState([]);
-
-  console.log(authUser);
 
   const [filters, setFilters] = useState({
     status: null,
@@ -19,8 +15,7 @@ function HomePage() {
     to: null,
   });
   const navigate = useNavigate();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
@@ -44,17 +39,17 @@ function HomePage() {
                 label="Status"
                 name="status"
                 value={filters.status}
-                onChange={handleChange}
+                onChange={handleFilterChange}
                 id="status"
                 placeholder="Filter by status"
                 options={["pending", "accepted", "rejected"]}
               />
             </div>
             <div className="">
-              <Input type="date" max={new Date().toISOString().split('T')[0]} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleChange} />
+              <Input type="date" max={new Date().toISOString().split('T')[0]} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleFilterChange} />
             </div>
             <div className="">
-              <Input type="date" max={new Date().toISOString().split('T')[0]} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleChange} />
+              <Input type="date" max={new Date().toISOString().split('T')[0]} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleFilterChange} />
             </div>
             <div className="">
               <Button onClick={() => navigate('/new-expense')} text="Create new expense" />

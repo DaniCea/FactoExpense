@@ -142,7 +142,7 @@ export default function NewExpenseForm({ onSubmit }) {
         </div>
       )}
 
-      {shouldRenderButton && (
+      { shouldRenderButton && (
         <Button
           type="submit"
           text="Add new product"

@@ -1,24 +1,25 @@
 import axios from './axiosInstance';
 
-interface IMilleageExpenseProps {
-  mileage_in_km: number;
-}
 
-export interface IGetExpensesProps {
+export interface IGetExpensesParams {
   from?: string;
   to?: string;
   status?: string;
 }
 
-export interface ICreateExpenseProps {
+export interface ICreateExpenseParams {
   type: string;
   amount: number;
   description: string;
   expense_type: string;
-  mileage_expense?: IMilleageExpenseProps;
 }
 
-export const getExpenses = async ({ from, to, status }: IGetExpensesProps = {}) => {
+export interface IUpdateExpenseStatusParams {
+  expenseId: string;
+  status: string;
+}
+
+export const getExpenses = async ({ from, to, status }: IGetExpensesParams = {}) => {
   try {
     const params = new URLSearchParams();
 
@@ -35,9 +36,17 @@ export const getExpenses = async ({ from, to, status }: IGetExpensesProps = {}) 
   }
 };
 
-export const createExpense = async (expense: ICreateExpenseProps) => {
+export const createExpense = async (expense: ICreateExpenseParams) => {
   try {
     return await axios.post('/expenses', expense);
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const updateExpenseStatus = async ({ expenseId, status }: IUpdateExpenseStatusParams) => {
+  try {
+    return await axios.patch(`/expenses/${expenseId}/status`, { status });
   } catch (error) {
     throw error;
   }

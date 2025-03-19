@@ -5,15 +5,16 @@ import { useState } from "react";
 
 interface IExpenseListProps {
   expense: any;
-  defaultStatus?: string;
   shouldEditStatus?: boolean;
+  onChange: (expenseId: string, status: string) => void;
 }
 
-export default function ExpenseListElement({ expense, defaultStatus = "pending", shouldEditStatus = true }: IExpenseListProps) {
-  const [status, setStatus] = useState(defaultStatus);
+export default function ExpenseListElement({ expense, shouldEditStatus = false, onChange }: IExpenseListProps) {
+  const [status, setStatus] = useState(expense.status);
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value);
+    onChange(expense.id, e.target.value);
   }
 
   const generateStatusIcon = () => {
@@ -46,7 +47,7 @@ export default function ExpenseListElement({ expense, defaultStatus = "pending",
           <div className="mr-3 font-semibold text-gray-900 dark:text-white">
             { expense.amount } $
           </div>
-          {shouldEditStatus && (
+          { shouldEditStatus && (
             <div className="mr-3 font-semibold text-gray-900 dark:text-white">
               <Selector
                 value={status}

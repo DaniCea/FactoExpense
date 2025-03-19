@@ -1,9 +1,8 @@
 import { AuthForm } from "../components";
-import { ILoginProps, ISignUpProps, signIn, signUp } from "../api";
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from "react-router";
 import { CenterGreyBackgroundLayout } from "./layouts";
-import {AxiosResponse} from "axios";
+import { AxiosResponse } from "axios";
 
 interface ISigninPageProps {
   type: 'signin' | 'signup';
