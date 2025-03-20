@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from "react-router";
 import AuthProvider from 'react-auth-kit';
 import createStore from 'react-auth-kit/createStore';
-import './index.css'
 import Router from './Router'
 
 const store = createStore({
