@@ -6,7 +6,7 @@ class CreateExpenses < ActiveRecord::Migration[8.0]
       t.string :title, null: false
       t.string :description
       t.decimal :amount, precision: 10, scale: 2, null: false, default: 0.0
-      t.string :status, default: 'pending'
+      t.integer :status, default: 0
 
       t.belongs_to :expenseable, polymorphic: true
 

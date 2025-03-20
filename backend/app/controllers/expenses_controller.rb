@@ -57,13 +57,13 @@ class ExpensesController < ApplicationController
 
   # Method to simulate the expense amount calculation based on the mileage, ideally this would run in another class or service
   def calculate_expense_amount(expenseable)
-    rate_per_km = rand(0.20..0.80).round(2) # Simulation of rate per km
+    rate_per_km = rand(0.20..0.80).round(2) # Simulation of amount calculation
     expenseable.mileage_in_km * rate_per_km
   end
 
   # Method to check if the user is an admin
   def authorize_admin
-    unless @current_user.role == 'admin'
+    unless @current_user.admin?
       render json: { errors: [ "Unauthorized action. Admins only." ] }, status: :unauthorized
     end
   end

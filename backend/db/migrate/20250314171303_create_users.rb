@@ -6,7 +6,7 @@ class CreateUsers < ActiveRecord::Migration[8.0]
       t.string :password_digest
 
       t.references :tenant, null: false, foreign_key: true
-      t.string :role, default: 'employee'
+      t.integer :role, default: 0
 
       t.timestamps
     end
