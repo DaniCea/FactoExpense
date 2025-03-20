@@ -32,7 +32,7 @@ class ExpensesController < ApplicationController
       expense = ExpenseFactory.build(params, @current_tenant, @current_user)
       expense.amount = calculate_expense_amount(expense.expenseable) if expense.expenseable.is_a?(MileageExpense)
 
-      unless expense.save
+      unless expense.save!
         render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
         raise ActiveRecord::Rollback
       end
@@ -43,13 +43,17 @@ class ExpensesController < ApplicationController
 
   # PATCH /expenses/:id/status
   def update_status
-    expense = Expense.find(params[:id])
+    expense = Expense.find_by(id: params[:id], tenant_id: @current_tenant.id)
+    return render json: { errors: [ "Expense not found" ] }, status: :not_found unless expense
 
-    # Only update the status field
-    if expense.update(status: status_param)
-      render json: expense, status: :ok
+    if Expense.statuses.key?(params[:status]) # Ensure the status is valid
+      if expense.update!(status: params[:status])
+        render json: expense, status: :ok
+      else
+        render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
+      end
     else
-      render json: { errors: expense.errors.full_messages }, status: :unprocessable_entity
+      render json: { errors: [ "Invalid status" ] }, status: :unprocessable_entity
     end
   end
 
@@ -71,8 +75,6 @@ class ExpensesController < ApplicationController
   def status_param
     params.require(:status)
   end
-
-  private
 
   # Strong parameters for expense
   def expense_params
