@@ -158,7 +158,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
     <form onSubmit={handleSubmit}>
       <div className="mb-5">
         <Selector
-          label="Expense type"
+          label="Expense Type"
           value={expenseType}
           onChange={handleExpenseTypeChange}
           id="expense_type"
@@ -170,7 +170,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       {expenseType === ExpenseType.TRAVEL && (
         <div className="mb-5">
           <Selector
-            label="Travel expense type"
+            label="Travel Expense Type"
             value={travelExpenseType}
             onChange={handleTravelExpenseTypeChange}
             id="travel_expense_type"
@@ -180,69 +180,36 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
         </div>
       )}
 
-      {visibleFields.includes("title") && (
-        <div className="mb-5">
-          <Input label="Title" name="title" id="title" placeholder="Title" value={formData.title} onChange={handleChange} />
-        </div>
-      )}
+      {visibleFields.map((field) => {
+        const commonProps = {
+          id: field,
+          name: field,
+          value: formData[field] || "",
+          onChange: handleChange,
+          placeholder: field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+          label: field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
+        };
 
-      {visibleFields.includes("description") && (
-        <div className="mb-5">
-          <Input label="Description" name="description" id="description" placeholder="Description (optional)" value={formData.description} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("amount") && expenseType !== "mileage" && (
-        <div className="mb-5">
-          <Input type="number" min="0.00" step="0.01" label="Amount" name="amount" id="amount" placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("mileage_in_km") && (
-        <div className="mb-5">
-          <Input type="number" min="0" label="Mileage (KM)" name="mileage_in_km" id="mileage_in_km" placeholder="Mileage (KM)" value={formData.mileage_in_km} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("trip_id") && (
-        <div className="mb-5">
-          <Input type="number" min="0" label="Trip ID" name="trip_id" id="trip_id" placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("hotel_name") && (
-        <div className="mb-5">
-          <Input label="Hotel Name" name="hotel_name" id="hotel_name" placeholder="Hotel Name" value={formData.hotel_name} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("check_in_date") && (
-        <div className="mb-5">
-          <Input type="date" max={new Date().toISOString().split("T")[0]} label="Check-in Date" name="check_in_date" id="check_in_date" placeholder="Check-in Date" value={formData.check_in_date} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("check_out_date") && (
-        <div className="mb-5">
-          <Input type="date" max={new Date().toISOString().split("T")[0]} label="Check-Out Date" name="check_out_date" id="check_out_date" placeholder="Check-out Date" value={formData.check_out_date} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("transportation_mode") && (
-        <div className="mb-5">
-          <Input label="Transportation Mode" name="transportation_mode" id="transportation_mode" placeholder="Transportation Mode" value={formData.transportation_mode} onChange={handleChange} />
-        </div>
-      )}
-
-      {visibleFields.includes("route") && (
-        <div className="mb-5">
-          <Input label="Route" name="route" id="route" placeholder="Route" value={formData.route} onChange={handleChange} />
-        </div>
-      )}
+        return (
+          <div className="mb-5" key={field}>
+            {field === "amount" && expenseType !== "mileage" ? (
+              <Input type="number" min="0.00" step="0.01" {...commonProps} />
+            ) : field === "mileage_in_km" ? (
+              <Input type="number" min="0" {...commonProps} />
+            ) : field === "trip_id" ? (
+              <Input type="number" min="0" {...commonProps} />
+            ) : field === "check_in_date" || field === "check_out_date" ? (
+              <Input type="date" max={new Date().toISOString().split("T")[0]} {...commonProps} />
+            ) : (
+              <Input {...commonProps} />
+            )}
+          </div>
+        );
+      })}
 
       {error && <p className="text-red-500 mb-5">{error}</p>}
-      <Button type="submit" text="Add new product" hidden={!shouldShowButton} />
 
+      <Button type="submit" text="Add New Product" disabled={!shouldShowButton} />
     </form>
   );
 }
