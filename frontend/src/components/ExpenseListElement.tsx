@@ -45,7 +45,7 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
             { expense.description }
           </p>
           <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-            { expense.created_at }
+            { new Date(expense.created_at).toISOString().split('T')[0] }
           </p>
         </div>
         <div className="flex justify-end">

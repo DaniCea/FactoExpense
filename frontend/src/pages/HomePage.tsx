@@ -41,7 +41,8 @@ function HomePage() {
                 onChange={handleFilterChange}
                 id="status"
                 placeholder="Filter by status"
-                options={["pending", "accepted", "rejected"]}
+                options={["", "pending", "accepted", "rejected"]}
+                displayOptions={["All", "Pending ⏳", "Accepted ✅", "Rejected ❌"]}
               />
             </div>
             <div className="">

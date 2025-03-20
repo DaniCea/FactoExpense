@@ -76,7 +76,35 @@ export default function NewExpenseForm({ onSubmit }) {
       return
     }
 
+    if (expenseType === "mileage" && !cleanedFormData.mileage_in_km) {
+      setError("Mileage is required");
+      return
+    }
 
+    if (travelExpenseType === "accommodation" && !cleanedFormData.hotel_name) {
+      setError("Hotel Name is required");
+      return
+    }
+
+    if (travelExpenseType === "accommodation" && !cleanedFormData.check_in_date) {
+      setError("Check-in Date is required");
+      return
+    }
+
+    if (travelExpenseType === "accommodation" && !cleanedFormData.check_out_date) {
+      setError("Check-out Date is required");
+      return
+    }
+
+    if (travelExpenseType === "transportation" && !cleanedFormData.transportation_mode) {
+      setError("Transportation mode is required");
+      return
+    }
+
+    if (travelExpenseType === "transportation" && !cleanedFormData.route) {
+      setError("Route is required");
+      return
+    }
 
     onSubmit({ ...cleanedFormData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
   };
@@ -89,11 +117,11 @@ export default function NewExpenseForm({ onSubmit }) {
 
   const shouldRenderMileageFields = expenseType === "mileage";
 
-  const shouldRenderTravelFields = expenseType === "travel";
-
   const shouldRenderAcommodationFields = expenseType === "travel" && travelExpenseType === "accommodation";
 
   const shouldRenderTransportationFields = expenseType === "travel" && travelExpenseType === "transportation";
+
+  const shouldRenderOtherFields = expenseType === "travel" && travelExpenseType === "other";
 
   const shouldRenderButton = (shouldRenderCommonFields && !shouldRenderMileageFields) || shouldRenderMileageFields;
 
@@ -140,14 +168,11 @@ export default function NewExpenseForm({ onSubmit }) {
         </div>
       )}
 
-      { shouldRenderTravelFields && (
-        <div className="mb-5">
-          <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
-        </div>
-      )}
-
       { shouldRenderAcommodationFields && (
         <>
+          <div className="mb-5">
+            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
+          </div>
           <div className="mb-5">
             <Input label='Hotel Name' name='hotel_name' id='hotel_name' placeholder="Hotel Name" value={formData.hotel_name} onChange={handleChange} />
           </div>
@@ -163,12 +188,21 @@ export default function NewExpenseForm({ onSubmit }) {
       { shouldRenderTransportationFields && (
         <>
           <div className="mb-5">
+            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
+          </div>
+          <div className="mb-5">
             <Input label='Transportation mode' name='transportation_mode' id='transportation_mode' placeholder="Transportation Mode" value={formData.transportation_mode} onChange={handleChange} />
           </div>
           <div className="mb-5">
             <Input label='Route' name='route' id='route' placeholder="Route" value={formData.route} onChange={handleChange} />
           </div>
         </>
+      )}
+
+      { shouldRenderOtherFields && (
+          <div className="mb-5">
+            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
+          </div>
       )}
 
       { shouldRenderMileageFields && (
