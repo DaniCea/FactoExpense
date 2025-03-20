@@ -240,9 +240,9 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
         </div>
       )}
 
+      {error && <p className="text-red-500 mb-5">{error}</p>}
       <Button type="submit" text="Add new product" hidden={!shouldShowButton} />
 
-      {error && <p className="text-red-500 mt-5">{error}</p>}
     </form>
   );
 }
