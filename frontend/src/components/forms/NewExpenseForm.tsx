@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Selector, Input } from "../common";
 import { Button } from "../common";
 import { ChangeEvent, FormEvent } from "react";
@@ -8,29 +8,58 @@ export type IProps = {
   onSubmit: (formData: Record<string, string>) => void;
 };
 
-const emptyFormData = {
-  title: "",
-  description: "",
-  amount: "",
-  mileage_in_km: "",
-  trip_id: "",
-  hotel_name: "",
-  check_in_date: "",
-  check_out_date: "",
-  transportation_mode: "",
-  route: ""
+export interface IFormData {
+  title: string;
+  description: string | null;
+  amount: string | null;
+  mileage_in_km: string | null;
+  trip_id: string | null;
+  hotel_name: string | null;
+  check_in_date: string | null;
+  check_out_date: string | null;
+  transportation_mode: string | null;
+  route: string | null;
 }
 
+const emptyFormData: IFormData = {
+  title: "",
+  description: null,
+  amount: null,
+  mileage_in_km: null,
+  trip_id: null,
+  hotel_name: null,
+  check_in_date: null,
+  check_out_date: null,
+  transportation_mode: null,
+  route: null
+};
+
+const fieldConfig = {
+  regular: ["title", "description", "amount"],
+  mileage: ["title", "description", "mileage_in_km"],
+  travel: {
+    accommodation: ["title", "description", "amount", "trip_id", "hotel_name", "check_in_date", "check_out_date"],
+    transportation: ["title", "description", "amount", "trip_id", "transportation_mode", "route"],
+    other: ["title", "description", "amount", "trip_id"]
+  }
+};
+
 export default function NewExpenseForm({ onSubmit }) {
-  const [formData, setFormData] = useState<Record<string, string>>(emptyFormData);
+  const [formData, setFormData] = useState<IFormData>(emptyFormData);
   const [error, setError] = useState<string | null>(null);
 
   const [expenseType, setExpenseType] = useState("");
   const [travelExpenseType, setTravelExpenseType] = useState("");
 
+  const shouldShowButton =
+      (expenseType === "travel" && travelExpenseType) ||
+      (expenseType !== "travel" && expenseType);
+
+  console.log(formData);
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setError(null);
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value === '' ? null : e.target.value });
   };
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -47,6 +76,57 @@ export default function NewExpenseForm({ onSubmit }) {
     setFormData(emptyFormData);
   };
 
+  const validateFormData = () => {
+
+    debugger;
+
+    const cleanedFormData = Object.fromEntries(
+      Object.entries(formData).filter(([_, value]) => value !== null)
+    );
+
+    if (!expenseType) {
+      return "Please select an expense type";
+    }
+
+    if (expenseType === "travel" && !travelExpenseType) {
+      return "Please select a travel expense type";
+    }
+
+    if (!cleanedFormData.title) {
+      return "Title is required";
+    }
+
+    if (expenseType !== "mileage" && !cleanedFormData.amount) {
+      return "Amount is required";
+    }
+
+    if (expenseType === "mileage" && !cleanedFormData.mileage_in_km) {
+      return "Mileage is required";
+    }
+
+    if (travelExpenseType === "accommodation" && !cleanedFormData.hotel_name) {
+      return "Hotel Name is required";
+    }
+
+    if (travelExpenseType === "accommodation" && !cleanedFormData.check_in_date) {
+      return "Check-in Date is required";
+    }
+
+    if (travelExpenseType === "accommodation" && !cleanedFormData.check_out_date) {
+      return "Check-out Date is required";
+    }
+
+    if (travelExpenseType === "transportation" && !cleanedFormData.transportation_mode) {
+      return "Transportation mode is required";
+    }
+
+    if (travelExpenseType === "transportation" && !cleanedFormData.route) {
+      return "Route is required";
+    }
+
+    return null;
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
@@ -55,169 +135,117 @@ export default function NewExpenseForm({ onSubmit }) {
       Object.entries(formData).filter(([_, value]) => value !== "" && value !== undefined)
     );
 
-    // Validation
-    if (!expenseType) {
-      setError("Please select an expense type");
+    const formError = validateFormData();
+    if (formError) {
+      setError(formError);
       return;
-    }
-
-    if (expenseType === "travel" && !travelExpenseType) {
-      setError("Please select a travel expense type");
-      return;
-    }
-
-    if (!cleanedFormData.title) {
-      setError("Title is required");
-      return;
-    }
-
-    if (expenseType !== "mileage" && !cleanedFormData.amount) {
-      setError("Amount is required");
-      return
-    }
-
-    if (expenseType === "mileage" && !cleanedFormData.mileage_in_km) {
-      setError("Mileage is required");
-      return
-    }
-
-    if (travelExpenseType === "accommodation" && !cleanedFormData.hotel_name) {
-      setError("Hotel Name is required");
-      return
-    }
-
-    if (travelExpenseType === "accommodation" && !cleanedFormData.check_in_date) {
-      setError("Check-in Date is required");
-      return
-    }
-
-    if (travelExpenseType === "accommodation" && !cleanedFormData.check_out_date) {
-      setError("Check-out Date is required");
-      return
-    }
-
-    if (travelExpenseType === "transportation" && !cleanedFormData.transportation_mode) {
-      setError("Transportation mode is required");
-      return
-    }
-
-    if (travelExpenseType === "transportation" && !cleanedFormData.route) {
-      setError("Route is required");
-      return
     }
 
     onSubmit({ ...cleanedFormData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
   };
 
-  const shouldRenderCommonFields =
-    (expenseType === "regular" || expenseType === "mileage") ||
-    (expenseType === "travel" && travelExpenseType);
+  const visibleFields = useMemo(() => {
+    let fieldsToRender: string[] = [];
 
-  const shouldRenderAmountField = shouldRenderCommonFields && expenseType !== "mileage";
+    if (expenseType === "mileage") {
+      fieldsToRender = fieldConfig.mileage;
+    } else if (expenseType === "regular") {
+      fieldsToRender = fieldConfig.regular;
+    } else if (expenseType === "travel" && travelExpenseType) {
+      fieldsToRender = fieldConfig.travel[travelExpenseType] || [];
+    }
 
-  const shouldRenderMileageFields = expenseType === "mileage";
-
-  const shouldRenderAcommodationFields = expenseType === "travel" && travelExpenseType === "accommodation";
-
-  const shouldRenderTransportationFields = expenseType === "travel" && travelExpenseType === "transportation";
-
-  const shouldRenderOtherFields = expenseType === "travel" && travelExpenseType === "other";
-
-  const shouldRenderButton = (shouldRenderCommonFields && !shouldRenderMileageFields) || shouldRenderMileageFields;
+    return fieldsToRender;
+  }, [expenseType, travelExpenseType]);
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-5">
         <Selector
-          label="Expense type"
-          value={expenseType}
-          onChange={handleExpenseTypeChange}
-          id="expense_type"
-          placeholder="Select an expense type"
-          options={["regular", "travel", "mileage"]}
+            label="Expense type"
+            value={expenseType}
+            onChange={handleExpenseTypeChange}
+            id="expense_type"
+            placeholder="Select an expense type"
+            options={["regular", "travel", "mileage"]}
         />
       </div>
 
       {expenseType === "travel" && (
+          <div className="mb-5">
+            <Selector
+                label="Travel expense type"
+                value={travelExpenseType}
+                onChange={handleTravelExpenseTypeChange}
+                id="travel_expense_type"
+                placeholder="Select travel expense type"
+                options={["accommodation", "transportation", "other"]}
+            />
+          </div>
+      )}
+
+      {visibleFields.includes("title") && (
         <div className="mb-5">
-          <Selector
-            label="Travel expense type"
-            value={travelExpenseType}
-            onChange={handleTravelExpenseTypeChange}
-            id="travel_expense_type"
-            placeholder="Select travel expense type"
-            options={["accommodation", "transportation", "other"]}
-          />
+          <Input label="Title" name="title" id="title" placeholder="Title" value={formData.title} onChange={handleChange} />
         </div>
       )}
 
-      {shouldRenderCommonFields && (
-        <>
-          <div className="mb-5">
-            <Input label='Title' name='title' id='title' placeholder="Title" value={formData.title} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input label='Description' name='description' id='description' placeholder="Description (optional)" value={formData.description} onChange={handleChange} />
-          </div>
-        </>
-      )}
-
-      { shouldRenderAmountField && (
+      {visibleFields.includes("description") && (
         <div className="mb-5">
-          <Input type="number" min="0.00" step="0.01" label='Amount' name='amount' id='amount' placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
+          <Input label="Description" name="description" id="description" placeholder="Description (optional)" value={formData.description} onChange={handleChange} />
         </div>
       )}
 
-      { shouldRenderAcommodationFields && (
-        <>
-          <div className="mb-5">
-            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input label='Hotel Name' name='hotel_name' id='hotel_name' placeholder="Hotel Name" value={formData.hotel_name} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input type="date" max={new Date().toISOString().split('T')[0]} label='Check-in Date' name='check_in_date' id='check_in_date' placeholder="Check-in Date" value={formData.check_in_date} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input type="date" max={new Date().toISOString().split('T')[0]} label='Check-Out Date' name='check_out_date' id='check_out_date' placeholder="Check-out Date" value={formData.check_out_date} onChange={handleChange} />
-          </div>
-        </>
-      )}
-
-      { shouldRenderTransportationFields && (
-        <>
-          <div className="mb-5">
-            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input label='Transportation mode' name='transportation_mode' id='transportation_mode' placeholder="Transportation Mode" value={formData.transportation_mode} onChange={handleChange} />
-          </div>
-          <div className="mb-5">
-            <Input label='Route' name='route' id='route' placeholder="Route" value={formData.route} onChange={handleChange} />
-          </div>
-        </>
-      )}
-
-      { shouldRenderOtherFields && (
-          <div className="mb-5">
-            <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
-          </div>
-      )}
-
-      { shouldRenderMileageFields && (
+      {visibleFields.includes("amount") && expenseType !== "mileage" && (
         <div className="mb-5">
-          <Input type="number" min="0" label='Mileage (KM)' name='mileage_in_km' id='mileage_in_km' placeholder="Mileage (KM)" value={formData.mileage_in_km} onChange={handleChange} />
+          <Input type="number" min="0.00" step="0.01" label="Amount" name="amount" id="amount" placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
         </div>
       )}
 
-      { shouldRenderButton && (
-        <Button
-          type="submit"
-          text="Add new product"
-        >
-        </Button>
+      {visibleFields.includes("mileage_in_km") && (
+        <div className="mb-5">
+          <Input type="number" min="0" label="Mileage (KM)" name="mileage_in_km" id="mileage_in_km" placeholder="Mileage (KM)" value={formData.mileage_in_km} onChange={handleChange} />
+        </div>
       )}
+
+      {visibleFields.includes("trip_id") && (
+        <div className="mb-5">
+          <Input type="number" min="0" label="Trip ID" name="trip_id" id="trip_id" placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
+        </div>
+      )}
+
+      {visibleFields.includes("hotel_name") && (
+        <div className="mb-5">
+          <Input label="Hotel Name" name="hotel_name" id="hotel_name" placeholder="Hotel Name" value={formData.hotel_name} onChange={handleChange} />
+        </div>
+      )}
+
+      {visibleFields.includes("check_in_date") && (
+        <div className="mb-5">
+          <Input type="date" max={new Date().toISOString().split("T")[0]} label="Check-in Date" name="check_in_date" id="check_in_date" placeholder="Check-in Date" value={formData.check_in_date} onChange={handleChange} />
+        </div>
+      )}
+
+      {visibleFields.includes("check_out_date") && (
+        <div className="mb-5">
+          <Input type="date" max={new Date().toISOString().split("T")[0]} label="Check-Out Date" name="check_out_date" id="check_out_date" placeholder="Check-out Date" value={formData.check_out_date} onChange={handleChange} />
+        </div>
+      )}
+
+      {visibleFields.includes("transportation_mode") && (
+        <div className="mb-5">
+          <Input label="Transportation Mode" name="transportation_mode" id="transportation_mode" placeholder="Transportation Mode" value={formData.transportation_mode} onChange={handleChange} />
+        </div>
+      )}
+
+      {visibleFields.includes("route") && (
+        <div className="mb-5">
+          <Input label="Route" name="route" id="route" placeholder="Route" value={formData.route} onChange={handleChange} />
+        </div>
+      )}
+
+      <Button type="submit" text="Add new product" hidden={!shouldShowButton} />
+
       {error && <p className="text-red-500 mt-5">{error}</p>}
     </form>
   );
