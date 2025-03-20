@@ -3,8 +3,10 @@
 # Creating some default tenants and users
 tenant = Tenant.create!(name: 'Tenant 1')
 tenant2 = Tenant.create!(name: 'Tenant 2')
-user = User.create!(name: 'Test tenant 1', email: 'test1@test.com', password: 'test', tenant: tenant)
-user2 = User.create!(name: 'Test tenant 2', email: 'test2@test.com', password: 'test', tenant: tenant2)
+user = User.create!(name: 'Test tenant 1', email: 'user1@test.com', password: 'test', tenant: tenant)
+User.create!(name: 'Test admin tenant 1', email: 'admin1@test.com', password: 'test', role: 'admin', tenant: tenant)
+User.create!(name: 'Test tenant 2', email: 'user2@test.com', password: 'test', tenant: tenant2)
+User.create!(name: 'Test admin tenant 2', email: 'admin2@test.com', password: 'test', role: 'admin', tenant: tenant2)
 
 accommodation = AccommodationTravelExpense.create!(
   hotel_name: 'Hotel ABC',
