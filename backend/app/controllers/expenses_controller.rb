@@ -81,6 +81,6 @@ class ExpensesController < ApplicationController
 
   # Strong parameters for TravelExpense
   def travel_expense_params
-    params.require(:travel_expense).permit(:sub_type, :hotel_name, :check_in_date, :check_out_date, :transportation_mode, :route)
+    params.require(:travel_expense).permit(:trip_id, :hotel_name, :check_in_date, :check_out_date, :transportation_mode, :route)
   end
 end

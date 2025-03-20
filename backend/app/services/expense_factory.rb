@@ -23,6 +23,8 @@ class ExpenseFactory
   private
 
   def self.create_travel_expense(params)
+    puts "HOLAAAAAAAAAAAAAAAAAAAAA"
+    puts params
     travel_expenseable = case params[:travel_expense_type].to_s.downcase
                          when 'accommodation'
                            AccommodationTravelExpense.create!(
@@ -38,6 +40,6 @@ class ExpenseFactory
                          else
                            nil
                          end
-    TravelExpense.create!(travel_expenseable: travel_expenseable)
+    TravelExpense.create!(trip_id: params[:trip_id], travel_expenseable: travel_expenseable)
   end
 end

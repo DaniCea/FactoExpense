@@ -13,6 +13,7 @@ const emptyFormData = {
   description: "",
   amount: "",
   mileage_in_km: "",
+  trip_id: "",
   hotel_name: "",
   check_in_date: "",
   check_out_date: "",
@@ -88,6 +89,8 @@ export default function NewExpenseForm({ onSubmit }) {
 
   const shouldRenderMileageFields = expenseType === "mileage";
 
+  const shouldRenderTravelFields = expenseType === "travel";
+
   const shouldRenderAcommodationFields = expenseType === "travel" && travelExpenseType === "accommodation";
 
   const shouldRenderTransportationFields = expenseType === "travel" && travelExpenseType === "transportation";
@@ -134,6 +137,12 @@ export default function NewExpenseForm({ onSubmit }) {
       { shouldRenderAmountField && (
         <div className="mb-5">
           <Input type="number" min="0.00" step="0.01" label='Amount' name='amount' id='amount' placeholder="Amount ($)" value={formData.amount} onChange={handleChange} />
+        </div>
+      )}
+
+      { shouldRenderTravelFields && (
+        <div className="mb-5">
+          <Input type="number" min="0" label='Trip ID' name='trip_id' id='trip_id' placeholder="Trip Id (Optional)" value={formData.trip_id} onChange={handleChange} />
         </div>
       )}
 
