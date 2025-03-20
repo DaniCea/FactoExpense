@@ -17,8 +17,6 @@ export default function ExpenseList({ expenses }: IExpenseListProps) {
     });
   };
 
-  console.log(expenses);
-
   return (
     <ul className="max-w divide-y divide-gray-200 dark:divide-gray-700 overflow-y-auto">
       {expenses.map((expense) => (

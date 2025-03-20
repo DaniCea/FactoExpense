@@ -12,6 +12,8 @@ interface IExpenseListProps {
 export default function ExpenseListElement({ expense, shouldEditStatus = false, onChange }: IExpenseListProps) {
   const [status, setStatus] = useState(expense.status);
 
+  console.log(expense);
+
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value);
     onChange(expense.id, e.target.value);

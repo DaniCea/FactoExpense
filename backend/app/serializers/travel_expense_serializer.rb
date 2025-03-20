@@ -1,5 +1,5 @@
 class TravelExpenseSerializer < ActiveModel::Serializer
-  attributes :travel_expenseable_type, :travel_expenseable_id
+  attributes :trip_id, :travel_expenseable_type
 
   belongs_to :travel_expenseable, polymorphic: true do
     object.travel_expenseable

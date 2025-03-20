@@ -13,6 +13,7 @@ accommodation = AccommodationTravelExpense.create!(
 )
 
 travel_expense_accommodation = TravelExpense.create!(
+  trip_id: 1,
   travel_expenseable: accommodation
 )
 
@@ -22,10 +23,12 @@ transportation = TransportationTravelExpense.create!(
 )
 
 travel_expense_transportation = TravelExpense.create!(
+  trip_id: 2,
   travel_expenseable: transportation
 )
 
 travel_expense_other = TravelExpense.create!(
+  trip_id: 1,
   travel_expenseable: nil
 )
 
