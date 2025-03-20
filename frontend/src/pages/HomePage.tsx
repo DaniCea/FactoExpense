@@ -5,6 +5,7 @@ import * as React from "react";
 import { useNavigate } from "react-router";
 import {Button, Input, Selector} from "../components/common";
 import ExpenseList from "../components/ExpenseList";
+import { ExpenseStatus } from "../common/enums";
 
 function HomePage() {
   const [expenses, setExpenses] = useState([]);
@@ -41,7 +42,7 @@ function HomePage() {
                 onChange={handleFilterChange}
                 id="status"
                 placeholder="Filter by status"
-                options={["", "pending", "accepted", "rejected"]}
+                options={[ "", ExpenseStatus.PENDING, ExpenseStatus.ACCEPTED, ExpenseStatus.REJECTED ]}
                 displayOptions={["All", "Pending ⏳", "Accepted ✅", "Rejected ❌"]}
               />
             </div>

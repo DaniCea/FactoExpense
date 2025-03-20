@@ -2,6 +2,7 @@ import Plane from "../icons/plane";
 import Hotel from "../icons/hotel";
 import { Selector } from "./common";
 import { useState } from "react";
+import { ExpenseStatus } from "../common/enums";
 
 interface IExpenseListProps {
   expense: any;
@@ -20,14 +21,15 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
   }
 
   const generateStatusIcon = () => {
-    if (expense.status === 'pending') {
-      return '⏳'
-    } else if (expense.status === 'accepted') {
-      return '✅'
-    } else if (expense.status === 'rejected') {
-      return '❌'
-    } else {
-      return '❓'
+    switch (expense.status) {
+      case ExpenseStatus.PENDING:
+        return '⏳';
+      case ExpenseStatus.ACCEPTED:
+        return '✅';
+      case ExpenseStatus.REJECTED:
+        return '❌';
+      default:
+        return '❓';
     }
   }
 
@@ -57,7 +59,7 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
                   value={status}
                   onChange={handleStatusChange}
                   id="expense_type"
-                  options={["pending", "accepted", "rejected"]}
+                  options={Object.values(ExpenseStatus)}
                   displayOptions={["Pending ⏳", "Accepted ✅", "Rejected ❌"]}
                 />
               </div>

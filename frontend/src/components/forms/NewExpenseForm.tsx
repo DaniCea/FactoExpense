@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Selector, Input } from "../common";
 import { Button } from "../common";
 import { ChangeEvent, FormEvent } from "react";
-import * as React from "react";
+import { ExpenseType, TravelExpenseType } from "../../common/enums";
 
 export type IProps = {
   onSubmit: (formData: Record<string, string>) => void;
@@ -38,22 +38,22 @@ const fieldConfig = {
   regular: ["title", "description", "amount"],
   mileage: ["title", "description", "mileage_in_km"],
   travel: {
-    accommodation: ["title", "description", "amount", "trip_id", "hotel_name", "check_in_date", "check_out_date"],
-    transportation: ["title", "description", "amount", "trip_id", "transportation_mode", "route"],
-    other: ["title", "description", "amount", "trip_id"]
+    [TravelExpenseType.ACCOMMODATION]: ["title", "description", "amount", "trip_id", "hotel_name", "check_in_date", "check_out_date"],
+    [TravelExpenseType.TRANSPORTATION]: ["title", "description", "amount", "trip_id", "transportation_mode", "route"],
+    [TravelExpenseType.OTHER]: ["title", "description", "amount", "trip_id"]
   }
 };
 
-export default function NewExpenseForm({ onSubmit }) {
+export default function NewExpenseForm({ onSubmit }: IProps) {
   const [formData, setFormData] = useState<IFormData>(emptyFormData);
   const [error, setError] = useState<string | null>(null);
 
-  const [expenseType, setExpenseType] = useState("");
-  const [travelExpenseType, setTravelExpenseType] = useState("");
+  const [expenseType, setExpenseType] = useState<ExpenseType | "">("");
+  const [travelExpenseType, setTravelExpenseType] = useState<TravelExpenseType | "">("");
 
   const shouldShowButton =
-      (expenseType === "travel" && travelExpenseType) ||
-      (expenseType !== "travel" && expenseType);
+    (expenseType === ExpenseType.TRAVEL && travelExpenseType) ||
+    (expenseType !== ExpenseType.TRAVEL && expenseType);
 
   console.log(formData);
 
@@ -64,22 +64,18 @@ export default function NewExpenseForm({ onSubmit }) {
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setExpenseType(e.target.value);
+    setExpenseType(e.target.value as ExpenseType);
     setTravelExpenseType("");
-
     setFormData(emptyFormData);
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setTravelExpenseType(e.target.value);
+    setTravelExpenseType(e.target.value as TravelExpenseType);
     setFormData(emptyFormData);
   };
 
   const validateFormData = () => {
-
-    debugger;
-
     const cleanedFormData = Object.fromEntries(
       Object.entries(formData).filter(([_, value]) => value !== null)
     );
@@ -88,7 +84,7 @@ export default function NewExpenseForm({ onSubmit }) {
       return "Please select an expense type";
     }
 
-    if (expenseType === "travel" && !travelExpenseType) {
+    if (expenseType === ExpenseType.TRAVEL && !travelExpenseType) {
       return "Please select a travel expense type";
     }
 
@@ -96,31 +92,31 @@ export default function NewExpenseForm({ onSubmit }) {
       return "Title is required";
     }
 
-    if (expenseType !== "mileage" && !cleanedFormData.amount) {
+    if (expenseType !== ExpenseType.MILEAGE && !cleanedFormData.amount) {
       return "Amount is required";
     }
 
-    if (expenseType === "mileage" && !cleanedFormData.mileage_in_km) {
+    if (expenseType === ExpenseType.MILEAGE && !cleanedFormData.mileage_in_km) {
       return "Mileage is required";
     }
 
-    if (travelExpenseType === "accommodation" && !cleanedFormData.hotel_name) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.hotel_name) {
       return "Hotel Name is required";
     }
 
-    if (travelExpenseType === "accommodation" && !cleanedFormData.check_in_date) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.check_in_date) {
       return "Check-in Date is required";
     }
 
-    if (travelExpenseType === "accommodation" && !cleanedFormData.check_out_date) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.check_out_date) {
       return "Check-out Date is required";
     }
 
-    if (travelExpenseType === "transportation" && !cleanedFormData.transportation_mode) {
+    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !cleanedFormData.transportation_mode) {
       return "Transportation mode is required";
     }
 
-    if (travelExpenseType === "transportation" && !cleanedFormData.route) {
+    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !cleanedFormData.route) {
       return "Route is required";
     }
 
@@ -147,11 +143,11 @@ export default function NewExpenseForm({ onSubmit }) {
   const visibleFields = useMemo(() => {
     let fieldsToRender: string[] = [];
 
-    if (expenseType === "mileage") {
+    if (expenseType === ExpenseType.MILEAGE) {
       fieldsToRender = fieldConfig.mileage;
-    } else if (expenseType === "regular") {
+    } else if (expenseType === ExpenseType.REGULAR) {
       fieldsToRender = fieldConfig.regular;
-    } else if (expenseType === "travel" && travelExpenseType) {
+    } else if (expenseType === ExpenseType.TRAVEL && travelExpenseType) {
       fieldsToRender = fieldConfig.travel[travelExpenseType] || [];
     }
 
@@ -162,26 +158,26 @@ export default function NewExpenseForm({ onSubmit }) {
     <form onSubmit={handleSubmit}>
       <div className="mb-5">
         <Selector
-            label="Expense type"
-            value={expenseType}
-            onChange={handleExpenseTypeChange}
-            id="expense_type"
-            placeholder="Select an expense type"
-            options={["regular", "travel", "mileage"]}
+          label="Expense type"
+          value={expenseType}
+          onChange={handleExpenseTypeChange}
+          id="expense_type"
+          placeholder="Select an expense type"
+          options={Object.values(ExpenseType)}
         />
       </div>
 
-      {expenseType === "travel" && (
-          <div className="mb-5">
-            <Selector
-                label="Travel expense type"
-                value={travelExpenseType}
-                onChange={handleTravelExpenseTypeChange}
-                id="travel_expense_type"
-                placeholder="Select travel expense type"
-                options={["accommodation", "transportation", "other"]}
-            />
-          </div>
+      {expenseType === ExpenseType.TRAVEL && (
+        <div className="mb-5">
+          <Selector
+            label="Travel expense type"
+            value={travelExpenseType}
+            onChange={handleTravelExpenseTypeChange}
+            id="travel_expense_type"
+            placeholder="Select travel expense type"
+            options={Object.values(TravelExpenseType)}
+          />
+        </div>
       )}
 
       {visibleFields.includes("title") && (
