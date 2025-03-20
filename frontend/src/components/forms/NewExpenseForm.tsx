@@ -9,30 +9,17 @@ export type IProps = {
 };
 
 export interface IFormData {
-  title: string;
-  description: string | null;
-  amount: string | null;
-  mileage_in_km: string | null;
-  trip_id: string | null;
-  hotel_name: string | null;
-  check_in_date: string | null;
-  check_out_date: string | null;
-  transportation_mode: string | null;
-  route: string | null;
+  title?: string;
+  description?: string;
+  amount?: string;
+  mileage_in_km?: string;
+  trip_id?: string;
+  hotel_name?: string;
+  check_in_date?: string;
+  check_out_date?: string;
+  transportation_mode?: string;
+  route?: string;
 }
-
-const emptyFormData: IFormData = {
-  title: "",
-  description: null,
-  amount: null,
-  mileage_in_km: null,
-  trip_id: null,
-  hotel_name: null,
-  check_in_date: null,
-  check_out_date: null,
-  transportation_mode: null,
-  route: null
-};
 
 const fieldConfig = {
   regular: ["title", "description", "amount"],
@@ -45,7 +32,7 @@ const fieldConfig = {
 };
 
 export default function NewExpenseForm({ onSubmit }: IProps) {
-  const [formData, setFormData] = useState<IFormData>(emptyFormData);
+  const [formData, setFormData] = useState<IFormData>({});
   const [error, setError] = useState<string | null>(null);
 
   const [expenseType, setExpenseType] = useState<ExpenseType | "">("");
@@ -66,20 +53,16 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
     setError(null);
     setExpenseType(e.target.value as ExpenseType);
     setTravelExpenseType("");
-    setFormData(emptyFormData);
+    setFormData({});
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
     setTravelExpenseType(e.target.value as TravelExpenseType);
-    setFormData(emptyFormData);
+    setFormData({});
   };
 
   const validateFormData = () => {
-    const cleanedFormData = Object.fromEntries(
-      Object.entries(formData).filter(([_, value]) => value !== null)
-    );
-
     if (!expenseType) {
       return "Please select an expense type";
     }
@@ -88,35 +71,35 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       return "Please select a travel expense type";
     }
 
-    if (!cleanedFormData.title) {
+    if (!formData.title) {
       return "Title is required";
     }
 
-    if (expenseType !== ExpenseType.MILEAGE && !cleanedFormData.amount) {
+    if (expenseType !== ExpenseType.MILEAGE && !formData.amount) {
       return "Amount is required";
     }
 
-    if (expenseType === ExpenseType.MILEAGE && !cleanedFormData.mileage_in_km) {
+    if (expenseType === ExpenseType.MILEAGE && !formData.mileage_in_km) {
       return "Mileage is required";
     }
 
-    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.hotel_name) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !formData.hotel_name) {
       return "Hotel Name is required";
     }
 
-    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.check_in_date) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !formData.check_in_date) {
       return "Check-in Date is required";
     }
 
-    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !cleanedFormData.check_out_date) {
+    if (travelExpenseType === TravelExpenseType.ACCOMMODATION && !formData.check_out_date) {
       return "Check-out Date is required";
     }
 
-    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !cleanedFormData.transportation_mode) {
+    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !formData.transportation_mode) {
       return "Transportation mode is required";
     }
 
-    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !cleanedFormData.route) {
+    if (travelExpenseType === TravelExpenseType.TRANSPORTATION && !formData.route) {
       return "Route is required";
     }
 
@@ -126,18 +109,13 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    // Remove keys with empty string values
-    const cleanedFormData = Object.fromEntries(
-      Object.entries(formData).filter(([_, value]) => value !== "" && value !== undefined)
-    );
-
     const formError = validateFormData();
     if (formError) {
       setError(formError);
       return;
     }
 
-    onSubmit({ ...cleanedFormData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
+    onSubmit({ ...formData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType })  });
   };
 
   const visibleFields = useMemo(() => {
