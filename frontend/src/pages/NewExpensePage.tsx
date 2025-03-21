@@ -17,14 +17,12 @@ function NewExpensePage() {
   }
 
   return (
-    <div className="h-screen">
-      <CenterGreyBackgroundLayout withNavbar>
-        <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          New Expense
-        </h1>
-        <NewExpenseForm onSubmit={handleSubmitNewExpense}/>
-      </CenterGreyBackgroundLayout>
-    </div>
+    <CenterGreyBackgroundLayout withNavbar>
+      <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+        New Expense
+      </h1>
+      <NewExpenseForm onSubmit={handleSubmitNewExpense}/>
+    </CenterGreyBackgroundLayout>
   );
 }
 
