@@ -11,17 +11,20 @@ import { Expense } from "../models/Expense";
 interface IExpenseListProps {
   expense: Expense;
   shouldEditStatus?: boolean;
-  onChange: (expenseId: number, status: ExpenseStatus) => void;
+  onChange: (props: IExpenseListStatusProps) => void;
+}
+
+export interface IExpenseListStatusProps {
+  expense: Expense,
+  newStatus: ExpenseStatus
 }
 
 export default function ExpenseListElement({ expense, shouldEditStatus = false, onChange }: IExpenseListProps) {
   const [status, setStatus] = useState(expense.status);
 
-  console.log(expense);
-
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setStatus(e.target.value as ExpenseStatus);
-    onChange(expense.id, e.target.value as ExpenseStatus);
+    onChange({ expense, newStatus: e.target.value as ExpenseStatus });
   }
 
   const createdAt = useMemo(() => {
@@ -55,28 +58,23 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
     }
     if (expense.travel?.accommodation) {
       const accommodation = expense.travel.accommodation;
-      return `${accommodation.hotelName} -- From ${format(new Date(accommodation.checkinDate), 'MM/dd/yyyy')} to ${format(new Date(accommodation.checkoutDate), 'MM/dd/yyyy')}`; // TODO: Fix dates
+      return `${accommodation.hotelName} -- From ${format(new UTCDate(accommodation.checkinDate), 'MM/dd/yyyy')} to ${format(new UTCDate(accommodation.checkoutDate), 'MM/dd/yyyy')}`;
     }
     if (expense.mileage) {
       return `${expense.mileage.mileageKm} KM`;
     }
   }
 
-  const generateStatusIcon = () => {
-    switch (expense.status) {
-      case ExpenseStatus.PENDING:
-        return '⏳';
-      case ExpenseStatus.ACCEPTED:
-        return '✅';
-      case ExpenseStatus.REJECTED:
-        return '❌';
-      default:
-        return '❓';
-    }
-  }
+  const statusIcons = {
+    [ExpenseStatus.PENDING]: '⏳',
+    [ExpenseStatus.ACCEPTED]: '✅',
+    [ExpenseStatus.REJECTED]: '❌',
+  };
+
+  const generateStatusIcon = () => statusIcons[expense.status] || '❓';
 
   return (
-    <li className="pb-3 pt-3" key={expense.id}>
+    <li className="pb-3 pt-3">
       <div className="flex items-center space-x-4 rtl:space-x-reverse">
         <div className="shrink-0">
           { iconSelector }

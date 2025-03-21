@@ -4,13 +4,14 @@ import { NewExpenseForm } from "../components";
 import { IFormData } from "../components/forms/NewExpenseForm/NewExpenseForm";
 import { CenterGreyBackgroundLayout } from "./layouts";
 import { createExpense, serializeNewExpenseBody } from "../api";
+import { ROUTES } from "../router/routes";
 
 function NewExpensePage() {
   const navigate = useNavigate();
 
   const handleSubmitNewExpense = (formData: IFormData) => {
     createExpense(serializeNewExpenseBody(formData)).then(() => {
-      navigate('/');
+      navigate(ROUTES.HOME);
     }).catch((error) => {
       console.error('Error creating expense: ', error);
     });

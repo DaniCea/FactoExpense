@@ -1,6 +1,6 @@
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
-import ExpenseListElement from "./ExpenseListElement";
+import ExpenseListElement, { IExpenseListStatusProps } from "./ExpenseListElement";
 import { updateExpenseStatus } from "../api";
 import { Expense } from "../models/Expense";
 import { User } from "../models/User";
@@ -13,8 +13,8 @@ interface IExpenseListProps {
 export default function ExpenseList({ expenses }: IExpenseListProps) {
   const user = useAuthUser<User>();
 
-  const handleChange = (expenseId: number, status: string) => {
-    updateExpenseStatus({ expenseId, status }).then((response) => {
+  const handleChange = ({ expense, newStatus }: IExpenseListStatusProps) => {
+    updateExpenseStatus({ expenseId: expense.id, status: newStatus }).then((response) => {
       console.log(response)
     }).catch((error) => {
       console.error('Error updating status: ', error);

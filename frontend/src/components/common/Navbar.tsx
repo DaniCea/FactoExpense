@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router";
 import useSignOut from 'react-auth-kit/hooks/useSignOut';
+import {ROUTES} from "../../router/routes";
 
 export default function NavBar(){
   const navigate = useNavigate();
@@ -7,7 +8,7 @@ export default function NavBar(){
 
   const handleLogOut = () => {
     signOut()
-    navigate('/signin')
+    navigate(ROUTES.SIGNIN)
   }
 
   return (

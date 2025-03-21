@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { AuthForm } from "../components";
 import { CenterGreyBackgroundLayout } from "./layouts";
 import { IAuthResponse } from "../api";
+import { ROUTES } from "../router/routes";
 
 export enum AuthType {
   SIGNIN = "signin",
@@ -27,7 +28,7 @@ function AuthPage({ type }: ISigninPageProps) {
       },
       userState: { ...response.user }
     })){
-      navigate('/');
+      navigate(ROUTES.HOME);
     } else {
       throw new Error('Failed to sign in');
     }
