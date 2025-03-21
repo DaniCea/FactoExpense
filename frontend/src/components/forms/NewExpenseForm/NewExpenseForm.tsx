@@ -126,7 +126,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setFormData({ expenseType: e.target.value as ExpenseType, travelExpenseType: "" });
+    setFormData({ expenseType: e.target.value as ExpenseType, travelExpenseType: undefined });
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -205,7 +205,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
         <div className="mb-5">
           <Selector
             label="Travel Expense Type"
-            value={formData.travelExpenseType}
+            value={formData.travelExpenseType ? formData.travelExpenseType : ""}
             onChange={handleTravelExpenseTypeChange}
             id="travel_expense_type"
             placeholder="Select travel expense type"

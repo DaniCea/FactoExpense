@@ -57,7 +57,7 @@ describe("NewExpenseForm", () => {
     expect(screen.getByText(/select an expense type/i)).toBeInTheDocument();
   });
 
-  it("submits a Regular form with correct data", () => {
+  it("submits a Regular Expense form with correct data", () => {
     render(<NewExpenseForm onSubmit={mockOnSubmit} />);
 
     // Select "Regular" expense type
@@ -80,11 +80,11 @@ describe("NewExpenseForm", () => {
     expect(mockOnSubmit).toHaveBeenCalledWith({
       title: "Business Lunch",
       amount: "50.00",
-      expense_type: ExpenseType.REGULAR,
+      expenseType: ExpenseType.REGULAR,
     });
   });
 
-  it("submits a Mileage form with correct data", () => {
+  it("submits a Mileage Expense form with correct data", () => {
     render(<NewExpenseForm onSubmit={mockOnSubmit} />);
 
     // Select "Regular" expense type
@@ -96,7 +96,7 @@ describe("NewExpenseForm", () => {
     fireEvent.change(screen.getByLabelText(/title/i), {
       target: { value: "Trip to see client" },
     });
-    fireEvent.change(screen.getByLabelText(/mileage in km/i), {
+    fireEvent.change(screen.getByLabelText(/mileage km/i), {
       target: { value: "30.00" },
     });
 
@@ -106,12 +106,12 @@ describe("NewExpenseForm", () => {
     // Expect onSubmit to be called with correct data
     expect(mockOnSubmit).toHaveBeenCalledWith({
       title: "Trip to see client",
-      mileage_in_km: "30.00",
-      expense_type: ExpenseType.MILEAGE,
+      mileageKm: "30.00",
+      expenseType: ExpenseType.MILEAGE,
     });
   });
 
-  it("submits a Travel Accommodation form with correct data", async () => {
+  it("submits a Travel Accommodation Expense form with correct data", async () => {
     render(<NewExpenseForm onSubmit={mockOnSubmit} />);
 
     // Select "Regular" expense type
@@ -143,10 +143,10 @@ describe("NewExpenseForm", () => {
     fireEvent.change(screen.getByLabelText(/hotel name/i), {
       target: { value: "Marriott Amsterdam" },
     });
-    fireEvent.change(screen.getByLabelText(/check in date/i), {
+    fireEvent.change(screen.getByLabelText(/checkin date/i), {
       target: { value: "2025-03-13" },
     });
-    fireEvent.change(screen.getByLabelText(/check out date/i), {
+    fireEvent.change(screen.getByLabelText(/checkout date/i), {
       target: { value: "2025-03-14" },
     });
 
@@ -158,12 +158,64 @@ describe("NewExpenseForm", () => {
       title: "Hotel night in Amsterdam",
       description: "Hotel night to see a client in Amsterdam",
       amount: "110",
-      trip_id: "1",
-      hotel_name: "Marriott Amsterdam",
-      check_in_date: "2025-03-13",
-      check_out_date: "2025-03-14",
-      expense_type: ExpenseType.TRAVEL,
-      travel_expense_type: TravelExpenseType.ACCOMMODATION
+      tripId: "1",
+      hotelName: "Marriott Amsterdam",
+      checkinDate: "2025-03-13",
+      checkoutDate: "2025-03-14",
+      expenseType: ExpenseType.TRAVEL,
+      travelExpenseType: TravelExpenseType.ACCOMMODATION
+    });
+  });
+
+  it("submits a Travel Transportation Expense form with correct data", async () => {
+    render(<NewExpenseForm onSubmit={mockOnSubmit} />);
+
+    // Select "Regular" expense type
+    fireEvent.change(screen.getByLabelText(/expense type/i), {
+      target: { value: ExpenseType.TRAVEL },
+    });
+
+    // Wait for the "Travel expense type" dropdown to appear
+    const travelExpenseType = await screen.findByLabelText(/travel expense type/i);
+
+    // Select "Accommodation" travel expense type
+    fireEvent.change(travelExpenseType, {
+      target: { value: TravelExpenseType.TRANSPORTATION },
+    });
+
+    // Fill in form fields
+    fireEvent.change(screen.getByLabelText(/title/i), {
+      target: { value: "Hotel night in Amsterdam" },
+    });
+    fireEvent.change(screen.getByLabelText(/description/i), {
+      target: { value: "Hotel night to see a client in Amsterdam" },
+    });
+    fireEvent.change(screen.getByLabelText(/amount/i), {
+      target: { value: "110" },
+    });
+    fireEvent.change(screen.getByLabelText(/trip id/i), {
+      target: { value: "1" },
+    });
+    fireEvent.change(screen.getByLabelText(/transportation mode/i), {
+      target: { value: "Train" },
+    });
+    fireEvent.change(screen.getByLabelText(/route/i), {
+      target: { value: "BCN - MAD" },
+    });
+
+    // Submit the form
+    fireEvent.click(screen.getByText(/add new product/i));
+
+    // Expect onSubmit to be called with correct data
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      title: "Hotel night in Amsterdam",
+      description: "Hotel night to see a client in Amsterdam",
+      amount: "110",
+      tripId: "1",
+      transportationMode: "Train",
+      route: "BCN - MAD",
+      expenseType: ExpenseType.TRAVEL,
+      travelExpenseType: TravelExpenseType.TRANSPORTATION
     });
   });
 });
