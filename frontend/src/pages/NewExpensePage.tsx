@@ -1,14 +1,16 @@
+import { useNavigate } from "react-router";
+
 import { NewExpenseForm } from "../components";
 import { CenterGreyBackgroundLayout } from "./layouts";
-import { createExpense } from "../api/expenses";
-import { useNavigate } from "react-router";
-import { IFormData, transformFormDataToCreateExpenseBody } from "../components/forms/NewExpenseForm/NewExpenseForm";
+
+import { IFormData } from "../components/forms/NewExpenseForm/NewExpenseForm";
+import { createExpense, serializeNewExpenseBody } from "../api";
 
 function NewExpensePage() {
   const navigate = useNavigate();
 
   const handleSubmitNewExpense = (formData: IFormData) => {
-    createExpense(transformFormDataToCreateExpenseBody(formData)).then(() => {
+    createExpense(serializeNewExpenseBody(formData)).then(() => {
       navigate('/');
     }).catch((error) => {
       console.error('Error creating expense: ', error);
