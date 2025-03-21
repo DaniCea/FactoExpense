@@ -1,14 +1,13 @@
-import { format } from "date-fns";
+import { format, parseISO  } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
 
 import { Expense, TravelData, MileageData, AccommodationData, TransportationData } from "../../models/Expense";
 import {ExpenseStatus, ExpenseType, TravelExpenseType} from "../../common/enums";
 import { IGetExpensesResponseParams } from "../expenses"; // adjust the import path accordingly
 
-export const serializeExpense = (response: IGetExpensesResponseParams): Expense => {
-  // Helper function to parse date strings into Date objects
-  const parseDate = (dateStr: string): Date => new Date(dateStr);   // TODO: Use UTCDate and format
+const parseDate = (dateStr: string): Date => parseISO(dateStr);
 
+export const serializeExpense = (response: IGetExpensesResponseParams): Expense => {
   // Serialize the expense object
   const expense: Expense = {
     id: response.id,
@@ -65,8 +64,8 @@ const mapTravelData = (travelExpense: IGetExpensesResponseParams['expenseable'][
     travelData.travelType = TravelExpenseType.ACCOMMODATION;
     travelData.accommodation = {
       hotelName: travelExpense.travel_expenseable.accommodation_travel_expense?.hotel_name || "",
-      checkinDate: null,  // TODO
-      checkoutDate: null, // TODO
+      checkinDate: parseDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_in_date),
+      checkoutDate: parseDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_out_date)
     };
   }
 

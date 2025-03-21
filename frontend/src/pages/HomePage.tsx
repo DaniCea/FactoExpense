@@ -5,7 +5,7 @@ import { getExpenses } from "../api/expenses";
 import * as React from "react";
 import { useNavigate } from "react-router";
 import { Button, Input, Selector } from "../components/common";
-import ExpenseList from "../components/ExpenseList";
+import { ExpenseList } from "../components";
 import { ExpenseStatus } from "../common/enums";
 import { Expense } from "../models/Expense";
 import { GreyBackgroundLayout } from "./layouts";

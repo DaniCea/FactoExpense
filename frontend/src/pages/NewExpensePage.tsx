@@ -2,7 +2,7 @@ import { NewExpenseForm } from "../components";
 import { CenterGreyBackgroundLayout } from "./layouts";
 import { createExpense } from "../api/expenses";
 import { useNavigate } from "react-router";
-import { IFormData, transformFormDataToCreateExpenseBody } from "../components/forms/NewExpenseForm";
+import { IFormData, transformFormDataToCreateExpenseBody } from "../components/forms/NewExpenseForm/NewExpenseForm";
 
 function NewExpensePage() {
   const navigate = useNavigate();

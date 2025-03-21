@@ -19,8 +19,6 @@ class ExpensesController < ApplicationController
       expenses = expenses.where('created_at <= ?', Date.parse(params[:to]).end_of_day)
     end
 
-    # TODO: Add pagination
-
     render json: expenses, include: "**", each_serializer: ExpenseSerializer, status: :ok
   end
 

@@ -1,9 +1,11 @@
 import { useState, useMemo } from "react";
 import { ChangeEvent, FormEvent } from "react";
-import { Selector, Input } from "../common";
-import { Button } from "../common";
-import { ExpenseType, TravelExpenseType } from "../../common/enums";
-import { ICreateExpenseBody } from "../../api/expenses";
+import { Selector } from "../../common";
+import { Button } from "../../common";
+import { ExpenseType, TravelExpenseType } from "../../../common/enums";
+import { capitalizeFirstLetter } from "../../../common/strings";
+import { ICreateExpenseBody } from "../../../api/expenses";
+import { FormField } from "./NewExpenseFormField";
 
 export type IProps = {
   onSubmit: (formData: IFormData) => void;
@@ -124,7 +126,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setFormData({ expenseType: e.target.value as ExpenseType, travelExpenseType: undefined });
+    setFormData({ expenseType: e.target.value as ExpenseType, travelExpenseType: "" });
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -158,10 +160,6 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
   const isValidDate = (date: string) => {
     const parsedDate = Date.parse(date);
     return !isNaN(parsedDate);
-  };
-
-  const capitalizeFirstLetter = (str: string) => {
-    return str.replace(/\b\w/g, (l) => l.toUpperCase());
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -217,34 +215,16 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       )}
 
       {visibleFields.map((field) => {
-        const commonProps = {
-          id: field,
-          name: field,
-          value: formData[field] || "",
-          onChange: handleChange,
-          placeholder: field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-          label: field.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase()),
-        };
+        const isRequired = validationRules[formData.expenseType]?.[formData.travelExpenseType]?.[field]?.required
+          ?? validationRules[formData.expenseType]?.[field]?.required
+          ?? false;
 
         return (
-          <div className="mb-5" key={field}>
-            {field === "amount" && formData.expenseType !== "mileage" ? (
-              <Input type="number" min="0.00" step="0.01" {...commonProps} />
-            ) : field === "mileageKm" ? (
-              <Input type="number" min="0" {...commonProps} />
-            ) : field === "tripId" ? (
-              <Input type="number" min="0" {...commonProps} />
-            ) : field === "checkinDate" || field === "checkoutDate" ? (
-              <Input type="date" max={new Date().toISOString().split("T")[0]} {...commonProps} />
-            ) : (
-              <Input {...commonProps} />
-            )}
-          </div>
+          <FormField key={field} field={field} formData={formData} handleChange={handleChange} isRequired={isRequired} />
         );
       })}
 
       {error && <p className="text-red-500 mb-5">{error}</p>}
-
       <Button type="submit" text="Add New Product" disabled={!shouldShowButton} />
     </form>
   );

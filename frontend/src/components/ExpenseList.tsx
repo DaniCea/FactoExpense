@@ -11,8 +11,7 @@ export default function ExpenseList({ expenses }: IExpenseListProps) {
   const userAuth = useAuthUser();
 
   const handleChange = (expenseId: number, status: string) => {
-    const id = String(expenseId);
-    updateExpenseStatus({ expenseId: id, status }).then((response) => {
+    updateExpenseStatus({ expenseId, status }).then((response) => {
       console.log(response)
     }).catch((error) => {
       console.error('Error updating status: ', error);
