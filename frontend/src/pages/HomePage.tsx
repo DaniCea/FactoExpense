@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { format } from 'date-fns';
+import { UTCDate } from '@date-fns/utc';
 import { getExpenses } from "../api/expenses";
 import { NavBar } from "../components";
 import * as React from "react";
 import { useNavigate } from "react-router";
-import {Button, Input, Selector} from "../components/common";
+import { Button, Input, Selector } from "../components/common";
 import ExpenseList from "../components/ExpenseList";
 import { ExpenseStatus } from "../common/enums";
 
@@ -19,6 +21,12 @@ function HomePage() {
   const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
+
+  const maxDate = useMemo(() => {
+    return format(new UTCDate(), 'yyyy-MM-dd');
+  }, []);
+
+  console.log('MAX DATE: ' + maxDate);
 
   useEffect(() =>{
     getExpenses(filters).then((response) => {
@@ -47,10 +55,10 @@ function HomePage() {
               />
             </div>
             <div className="">
-              <Input type="date" max={new Date().toISOString().split('T')[0]} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleFilterChange} />
+              <Input type="date" max={maxDate} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleFilterChange} />
             </div>
             <div className="">
-              <Input type="date" max={new Date().toISOString().split('T')[0]} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleFilterChange} />
+              <Input type="date" max={maxDate} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleFilterChange} />
             </div>
             <div className="flex items-end">
               <Button onClick={() => navigate('/new-expense')} text="Create new expense" />

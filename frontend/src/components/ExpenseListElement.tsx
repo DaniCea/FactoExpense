@@ -1,7 +1,10 @@
+import * as React from "react";
+import { useMemo, useState } from "react";
+import { format } from "date-fns";
+import { UTCDate } from "@date-fns/utc";
 import Plane from "../icons/plane";
 import Hotel from "../icons/hotel";
 import { Selector } from "./common";
-import { useState } from "react";
 import { ExpenseStatus } from "../common/enums";
 
 interface IExpenseListProps {
@@ -19,6 +22,10 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
     setStatus(e.target.value);
     onChange(expense.id, e.target.value);
   }
+
+  const createdAt = useMemo(() => {
+    return format(new UTCDate(expense.created_at), 'MM/dd/yyyy');
+  }, []);
 
   const generateStatusIcon = () => {
     switch (expense.status) {
@@ -47,7 +54,7 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
             { expense.description }
           </p>
           <p className="text-sm text-gray-500 truncate dark:text-gray-400">
-            { new Date(expense.created_at).toISOString().split('T')[0] }
+            { createdAt }
           </p>
         </div>
         <div className="flex justify-end">
