@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as React from "react";
 import { Button, Input } from "../common";
-import {ILoginProps, ISignUpProps, signIn, signUp} from "../../api";
+import { signIn, signUp } from "../../api";
 import { AxiosResponse } from "axios";
 
 export type IProps = {
@@ -50,8 +50,7 @@ export default function AuthForm({ onSubmit, type }: IProps) {
       return;
     }
 
-    const typedAuthProps = isSignup ? formData as ISignUpProps : formData as ILoginProps;
-    apiAuthFunction(typedAuthProps).then((response) => {
+    apiAuthFunction(formData).then((response) => {
       onSubmit(response);
     }).catch((error) => {
       setError(error.response.data.errors[0]);

@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router";
 
 import { NewExpenseForm } from "../components";
-import { CenterGreyBackgroundLayout } from "./layouts";
-
 import { IFormData } from "../components/forms/NewExpenseForm/NewExpenseForm";
+import { CenterGreyBackgroundLayout } from "./layouts";
 import { createExpense, serializeNewExpenseBody } from "../api";
 
 function NewExpensePage() {

@@ -1,10 +1,8 @@
 import { useState, useMemo } from "react";
 import { ChangeEvent, FormEvent } from "react";
-import { Selector } from "../../common";
-import { Button } from "../../common";
-import { ExpenseType, TravelExpenseType } from "../../../common/enums";
-import { capitalizeFirstLetter } from "../../../common/strings";
-import { ICreateExpenseBody } from "../../../api/expenses";
+
+import { Selector, Button } from "../../common";
+import { ExpenseType, TravelExpenseType, capitalizeFirstLetter, isValidDate } from "../../../common";
 import { FormField } from "./NewExpenseFormField";
 
 export type IProps = {
@@ -139,11 +137,6 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       }
     }
     return null;
-  };
-
-  const isValidDate = (date: string) => {
-    const parsedDate = Date.parse(date);
-    return !isNaN(parsedDate);
   };
 
   const handleSubmit = (e: FormEvent) => {
