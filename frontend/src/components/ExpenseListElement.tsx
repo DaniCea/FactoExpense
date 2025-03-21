@@ -2,8 +2,7 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
-import Plane from "../icons/plane";
-import Hotel from "../icons/hotel";
+import { PlaneIcon, GasIcon, HotelIcon, ExpenseIcon } from "../icons";
 import { Selector } from "./common";
 import { ExpenseStatus } from "../common/enums";
 
@@ -27,6 +26,13 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
     return format(new UTCDate(expense.created_at), 'MM/dd/yyyy');
   }, []);
 
+  const iconSelector= () => {
+    if (expense.expenseable_type === "TravelExpense" && expense.expenseable.travel_expense.travel_expenseable_type === "TransportationTravelExpense") return <PlaneIcon />
+    if (expense.expenseable_type === "TravelExpense" && expense.expenseable.travel_expense.travel_expenseable_type === "AccommodationTravelExpense") return <HotelIcon />
+    if (expense.expenseable_type === "MileageExpense") return <GasIcon />
+    else return <ExpenseIcon />
+  }
+
   const generateStatusIcon = () => {
     switch (expense.status) {
       case ExpenseStatus.PENDING:
@@ -44,7 +50,7 @@ export default function ExpenseListElement({ expense, shouldEditStatus = false, 
     <li className="pb-3 pt-3" key={expense.id}>
       <div className="flex items-center space-x-4 rtl:space-x-reverse">
         <div className="shrink-0">
-          <Plane />
+          { iconSelector() }
         </div>
         <div className="flex-auto">
           <p className="text-sm font-medium text-gray-900 truncate dark:text-white">
