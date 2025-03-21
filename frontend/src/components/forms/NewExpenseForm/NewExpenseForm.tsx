@@ -2,7 +2,8 @@ import { useState, useMemo } from "react";
 import { ChangeEvent, FormEvent } from "react";
 
 import { Selector, Button } from "../../common";
-import { ExpenseType, TravelExpenseType, capitalizeFirstLetter, isValidDate } from "../../../common";
+import { ExpenseType, TravelExpenseType } from "../../../common";
+import { capitalizeFirstLetter, isValidDate } from "../../../utils";
 import { FormField } from "./NewExpenseFormField";
 
 export type IProps = {

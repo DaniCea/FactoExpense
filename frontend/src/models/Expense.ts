@@ -1,4 +1,4 @@
-import { ExpenseStatus, ExpenseType, TravelExpenseType } from "../common/enums";
+import { ExpenseStatus, ExpenseType, TravelExpenseType } from "../common";
 
 export interface Expense {
   id: number,
