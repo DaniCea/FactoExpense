@@ -5,12 +5,17 @@ import { AuthForm } from "../components";
 import { CenterGreyBackgroundLayout } from "./layouts";
 import { IAuthResponse } from "../api";
 
+export enum AuthType {
+  SIGNIN = "signin",
+  SIGNUP = "signup",
+}
+
 interface ISigninPageProps {
-  type: 'signin' | 'signup';
+  type: AuthType
 }
 
 function AuthPage({ type }: ISigninPageProps) {
-  const isSignup = type === 'signup';
+  const isSignup = type === AuthType.SIGNUP;
   const signInAuth = useSignIn()
   const navigate = useNavigate();
 
