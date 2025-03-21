@@ -3,6 +3,7 @@ import { ChangeEvent, FormEvent } from "react";
 import { Selector, Input } from "../common";
 import { Button } from "../common";
 import { ExpenseType, TravelExpenseType } from "../../common/enums";
+import { ICreateExpenseBody } from "../../api/expenses";
 
 export type IProps = {
   onSubmit: (formData: IFormData) => void;
@@ -12,12 +13,12 @@ export interface IFormData {
   title?: string;
   description?: string;
   amount?: string;
-  mileage_in_km?: string;
-  trip_id?: string;
-  hotel_name?: string;
-  check_in_date?: string;
-  check_out_date?: string;
-  transportation_mode?: string;
+  mileageKm?: string;
+  tripId?: string;
+  hotelName?: string;
+  checkinDate?: string;
+  checkoutDate?: string;
+  transportationMode?: string;
   route?: string;
   expenseType?: ExpenseType | "";
   travelExpenseType?: TravelExpenseType | "";
@@ -31,11 +32,11 @@ export interface IValidationRules {
 
 const fieldConfig = {
   regular: ["title", "description", "amount"],
-  mileage: ["title", "description", "mileage_in_km"],
+  mileage: ["title", "description", "mileageKm"],
   travel: {
-    [TravelExpenseType.ACCOMMODATION]: ["title", "description", "amount", "trip_id", "hotel_name", "check_in_date", "check_out_date"],
-    [TravelExpenseType.TRANSPORTATION]: ["title", "description", "amount", "trip_id", "transportation_mode", "route"],
-    [TravelExpenseType.OTHER]: ["title", "description", "amount", "trip_id"]
+    [TravelExpenseType.ACCOMMODATION]: ["title", "description", "amount", "tripId", "hotelName", "checkinDate", "checkoutDate"],
+    [TravelExpenseType.TRANSPORTATION]: ["title", "description", "amount", "tripId", "transportationMode", "route"],
+    [TravelExpenseType.OTHER]: ["title", "description", "amount", "tripId"]
   }
 };
 
@@ -44,12 +45,12 @@ const baseValidationRules: Record<string, IValidationRules> = {
   title: { required: true, errorMessage: "Title is required" },
   description: { required: false },
   amount: { required: true, type: 'number', errorMessage: "Amount is required and must be a number" },
-  mileage_in_km: { required: true, type: 'number', errorMessage: "Mileage is required and must be a valid number" },
-  trip_id: { required: false },
-  hotel_name: { required: true, errorMessage: "Hotel Name is required" },
-  check_in_date: { required: true, type: 'date', errorMessage: "Check-in Date is required and must be a valid date" },
-  check_out_date: { required: true, type: 'date', errorMessage: "Check-out Date is required and must be a valid date" },
-  transportation_mode: { required: true, errorMessage: "Transportation Mode is required" },
+  mileageKm: { required: true, type: 'number', errorMessage: "Mileage is required and must be a valid number" },
+  tripId: { required: false },
+  hotelName: { required: true, errorMessage: "Hotel Name is required" },
+  checkinDate: { required: true, type: 'date', errorMessage: "Check-in Date is required and must be a valid date" },
+  checkoutDate: { required: true, type: 'date', errorMessage: "Check-out Date is required and must be a valid date" },
+  transportationMode: { required: true, errorMessage: "Transportation Mode is required" },
   route: { required: true, errorMessage: "Route is required" }
 };
 
@@ -62,34 +63,50 @@ const validationRules = {
   },
   [ExpenseType.MILEAGE]: {
     title: baseValidationRules.title,
-    mileage_in_km: baseValidationRules.mileage_in_km,
+    mileageKm: baseValidationRules.mileageKm,
     description: baseValidationRules.description
   },
   [ExpenseType.TRAVEL]: {
     [TravelExpenseType.ACCOMMODATION]: {
       title: baseValidationRules.title,
       amount: baseValidationRules.amount,
-      hotel_name: baseValidationRules.hotel_name,
-      check_in_date: baseValidationRules.check_in_date,
-      check_out_date: baseValidationRules.check_out_date,
-      trip_id: baseValidationRules.trip_id,
+      hotelName: baseValidationRules.hotelName,
+      checkinDate: baseValidationRules.checkinDate,
+      checkoutDate: baseValidationRules.checkoutDate,
+      tripId: baseValidationRules.tripId,
       description: baseValidationRules.description
     },
     [TravelExpenseType.TRANSPORTATION]: {
       title: baseValidationRules.title,
       amount: baseValidationRules.amount,
-      transportation_mode: baseValidationRules.transportation_mode,
+      transportationMode: baseValidationRules.transportationMode,
       route: baseValidationRules.route,
-      trip_id: baseValidationRules.trip_id,
+      tripId: baseValidationRules.tripId,
       description: baseValidationRules.description
     },
     [TravelExpenseType.OTHER]: {
       title: baseValidationRules.title,
       amount: baseValidationRules.amount,
-      trip_id: baseValidationRules.trip_id,
+      tripId: baseValidationRules.tripId,
       description: baseValidationRules.description
     }
   }
+};
+
+export const transformFormDataToCreateExpenseBody = (formData: IFormData): ICreateExpenseBody => {
+  return {
+    title: formData.title || "",
+    amount: Number(formData.amount) || undefined,
+    expense_type: formData.expenseType || "",
+    travel_expense_type: formData.travelExpenseType || undefined,
+    description: formData.description || undefined,
+    hotel_name: formData.hotelName || undefined,
+    check_in_date: formData.checkinDate || undefined,
+    check_out_date: formData.checkoutDate || undefined,
+    transportation_mode: formData.transportationMode || undefined,
+    route: formData.route || undefined,
+    mileage_in_km: formData.mileageKm || undefined,
+  };
 };
 
 export default function NewExpenseForm({ onSubmit }: IProps) {
@@ -107,7 +124,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setFormData({ expenseType: e.target.value as ExpenseType });
+    setFormData({ expenseType: e.target.value as ExpenseType, travelExpenseType: undefined });
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -213,11 +230,11 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
           <div className="mb-5" key={field}>
             {field === "amount" && formData.expenseType !== "mileage" ? (
               <Input type="number" min="0.00" step="0.01" {...commonProps} />
-            ) : field === "mileage_in_km" ? (
+            ) : field === "mileageKm" ? (
               <Input type="number" min="0" {...commonProps} />
-            ) : field === "trip_id" ? (
+            ) : field === "tripId" ? (
               <Input type="number" min="0" {...commonProps} />
-            ) : field === "check_in_date" || field === "check_out_date" ? (
+            ) : field === "checkinDate" || field === "checkoutDate" ? (
               <Input type="date" max={new Date().toISOString().split("T")[0]} {...commonProps} />
             ) : (
               <Input {...commonProps} />

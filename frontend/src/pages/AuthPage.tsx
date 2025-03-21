@@ -28,7 +28,7 @@ function AuthPage({ type }: ISigninPageProps) {
   }
 
   return (
-    <CenterGreyBackgroundLayout centered>
+    <CenterGreyBackgroundLayout verticalCenter>
       <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
         {isSignup ? "Create an account" : "Sign in"}
       </h1>

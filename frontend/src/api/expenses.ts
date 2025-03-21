@@ -1,7 +1,7 @@
 import axios from './axiosInstance';
 import { AxiosResponse } from "axios";
 import { Expense } from "../models/Expense";
-import {deserializeExpense, serializeExpense} from "./serializers/ExpenseSerializer";
+import { serializeExpense } from "./serializers/ExpenseSerializer";
 
 // Request params GET /expenses
 export interface IGetExpensesRequestParams {
@@ -48,7 +48,7 @@ export interface IGetExpensesResponseParams {
 
 // Serialized
 export interface ICreateExpenseBody {
-  type: string;
+  title: string;
   amount: number;
   expense_type: string;
   travel_expense_type?: string;
@@ -62,44 +62,31 @@ export interface ICreateExpenseBody {
 }
 
 export interface IUpdateExpenseStatusParams {
-  expenseId: string;
+  expenseId: number;
   status: string;
 }
 
 export const getExpenses = async ({ from, to, status }: IGetExpensesRequestParams = {}): Promise<Expense[]> => {
-  try {
-    const params = new URLSearchParams();
+  const params = new URLSearchParams();
 
-    if (from) params.append("from", from);
-    if (to) params.append("to", to);
-    if (status) params.append("status", status);
+  if (from) params.append("from", from);
+  if (to) params.append("to", to);
+  if (status) params.append("status", status);
 
-    const queryString = params.toString();
-    const url = queryString ? `/expenses?${queryString}` : "/expenses";
+  const queryString = params.toString();
+  const url = queryString ? `/expenses?${queryString}` : "/expenses";
 
-    const response: AxiosResponse<IGetExpensesResponseParams[]> = await axios.get(url);
+  const response: AxiosResponse<IGetExpensesResponseParams[]> = await axios.get(url);
 
-    const data: IGetExpensesResponseParams[] = response.data;
+  const data: IGetExpensesResponseParams[] = response.data;
 
-    return data.map(serializeExpense);
-  } catch (error) {
-    throw error;
-  }
+  return data.map(serializeExpense);
 };
 
-export const createExpense = async (expense: Expense) => {
-  try {
-    debugger;
-    return await axios.post('/expenses', deserializeExpense(expense));
-  } catch (error) {
-    throw error;
-  }
+export const createExpense = async (expenseBody: ICreateExpenseBody) => {
+  return await axios.post('/expenses', expenseBody);
 }
 
 export const updateExpenseStatus = async ({ expenseId, status }: IUpdateExpenseStatusParams) => {
-  try {
-    return await axios.patch(`/expenses/${expenseId}/status`, { status });
-  } catch (error) {
-    throw error;
-  }
+  return await axios.patch(`/expenses/${expenseId}/status`, { status });
 }

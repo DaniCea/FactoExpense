@@ -2,13 +2,13 @@ import { useEffect, useState, useMemo } from "react";
 import { format } from 'date-fns';
 import { UTCDate } from '@date-fns/utc';
 import { getExpenses } from "../api/expenses";
-import { NavBar } from "../components";
 import * as React from "react";
 import { useNavigate } from "react-router";
 import { Button, Input, Selector } from "../components/common";
 import ExpenseList from "../components/ExpenseList";
 import { ExpenseStatus } from "../common/enums";
 import { Expense } from "../models/Expense";
+import { GreyBackgroundLayout } from "./layouts";
 
 function HomePage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
@@ -27,8 +27,6 @@ function HomePage() {
     return format(new UTCDate(), 'yyyy-MM-dd');
   }, []);
 
-  console.log('MAX DATE: ' + maxDate);
-
   useEffect(() =>{
     getExpenses(filters).then((expenses) => {
       setExpenses(expenses);
@@ -39,39 +37,34 @@ function HomePage() {
   }, [filters])
 
   return (
-    <div className="h-screen bg-gray-50">
-      <NavBar />
-      <section className="dark:bg-gray-900">
-        <div className="px-6 py-8 mx-auto">
-          <div className="grid grid-cols-4 gap-4">
-            <div className="">
-              <Selector
-                label="Status"
-                name="status"
-                value={filters.status}
-                onChange={handleFilterChange}
-                id="status"
-                placeholder="Filter by status"
-                options={[ "", ExpenseStatus.PENDING, ExpenseStatus.ACCEPTED, ExpenseStatus.REJECTED ]}
-                displayOptions={["All", "Pending ⏳", "Accepted ✅", "Rejected ❌"]}
-              />
-            </div>
-            <div className="">
-              <Input type="date" max={maxDate} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleFilterChange} />
-            </div>
-            <div className="">
-              <Input type="date" max={maxDate} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleFilterChange} />
-            </div>
-            <div className="flex items-end">
-              <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
-            </div>
-          </div>
-          <div className="w-full max-h-[75vh] overflow-y-auto mt-5">
-            <ExpenseList expenses={ expenses }></ExpenseList>
-          </div>
+    <GreyBackgroundLayout withNavbar>
+      <div className="grid grid-cols-4 gap-4">
+        <div>
+          <Selector
+            label="Status"
+            name="status"
+            value={filters.status}
+            onChange={handleFilterChange}
+            id="status"
+            placeholder="Filter by status"
+            options={[ "", ExpenseStatus.PENDING, ExpenseStatus.ACCEPTED, ExpenseStatus.REJECTED ]}
+            displayOptions={["All", "Pending ⏳", "Accepted ✅", "Rejected ❌"]}
+          />
         </div>
-      </section>
-    </div>
+        <div>
+          <Input type="date" max={maxDate} label='From' name='from' id='from' placeholder="From Date" value={filters.from} onChange={handleFilterChange} />
+        </div>
+        <div>
+          <Input type="date" max={maxDate} label='To' name='to' id='to' placeholder="To Date" value={filters.to} onChange={handleFilterChange} />
+        </div>
+        <div className="flex items-end">
+          <Button onClick={() => navigate('/new-expense')} text="Create new expense" />
+        </div>
+      </div>
+      <div className="w-full max-h-[75vh] overflow-y-auto mt-5">
+        <ExpenseList expenses={ expenses }></ExpenseList>
+      </div>
+    </GreyBackgroundLayout>
   );
 }
 

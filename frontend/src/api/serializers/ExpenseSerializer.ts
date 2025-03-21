@@ -3,7 +3,7 @@ import { UTCDate } from "@date-fns/utc";
 
 import { Expense, TravelData, MileageData, AccommodationData, TransportationData } from "../../models/Expense";
 import {ExpenseStatus, ExpenseType, TravelExpenseType} from "../../common/enums";
-import { ICreateExpenseBody, IGetExpensesResponseParams } from "../expenses"; // adjust the import path accordingly
+import { IGetExpensesResponseParams } from "../expenses"; // adjust the import path accordingly
 
 export const serializeExpense = (response: IGetExpensesResponseParams): Expense => {
   // Helper function to parse date strings into Date objects
@@ -23,45 +23,6 @@ export const serializeExpense = (response: IGetExpensesResponseParams): Expense 
   };
 
   return expense;
-};
-
-export const deserializeExpense = (expense: Expense): ICreateExpenseBody => {
-  const expenseBody: ICreateExpenseBody = {
-    type: expense.title,
-    amount: expense.amount,
-    expense_type: expense.expenseType,
-  };
-
-  if (expense.description) {
-    expenseBody.description = expense.description;
-  }
-
-  if (expense.travel) {
-    const travel = expense.travel;
-
-    if (travel.accommodation) {
-      expenseBody.hotel_name = travel.accommodation.hotelName;
-      expenseBody.check_in_date = travel.accommodation.checkinDate.toISOString().split("T")[0];
-      expenseBody.check_out_date = travel.accommodation.checkoutDate.toISOString().split("T")[0];
-    }
-
-    if (travel.transportation) {
-      expenseBody.transportation_mode = travel.transportation.transportationMode;
-      expenseBody.route = travel.transportation.route;
-    }
-
-    if (expense.expenseType === ExpenseType.TRAVEL) {
-      expenseBody.travel_expense_type = expense.travel.travelType;
-    }
-  }
-
-  // Handling mileage data
-  if (expense.mileage) {
-    // Map mileage data
-    expenseBody.mileage_in_km = expense.mileage.mileageKm ? String(expense.mileage.mileageKm) : "";
-  }
-
-  return expenseBody;
 };
 
 // Helper function to map status string to the ExpenseStatus enum
