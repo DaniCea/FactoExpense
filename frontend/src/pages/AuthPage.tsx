@@ -1,9 +1,9 @@
 import useSignIn from 'react-auth-kit/hooks/useSignIn';
 import { useNavigate } from "react-router";
-import { AxiosResponse } from "axios";
 
 import { AuthForm } from "../components";
 import { CenterGreyBackgroundLayout } from "./layouts";
+import { IAuthResponse } from "../api";
 
 interface ISigninPageProps {
   type: 'signin' | 'signup';
@@ -14,13 +14,13 @@ function AuthPage({ type }: ISigninPageProps) {
   const signInAuth = useSignIn()
   const navigate = useNavigate();
 
-  const handleAuthSubmit = (response: AxiosResponse<any, any>) => {
+  const handleAuthSubmit = (response: IAuthResponse) => {
     if(signInAuth({
       auth: {
-        token: response.data.token,
+        token: response.token,
         type: 'Bearer',
       },
-      userState: { user: response.data.user }
+      userState: { ...response.user }
     })){
       navigate('/');
     } else {

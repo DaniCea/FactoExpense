@@ -1,7 +1,7 @@
 export enum ExpenseType {
   REGULAR = "regular",
   TRAVEL = "travel",
-  MILEAGE = "mileage",
+  MILEAGE = "mileage"
 }
 
 export enum ExpenseStatus {
@@ -13,5 +13,10 @@ export enum ExpenseStatus {
 export enum TravelExpenseType {
   ACCOMMODATION = "accommodation",
   TRANSPORTATION = "transportation",
-  OTHER = "other",
+  OTHER = "other"
+}
+
+export enum UserType {
+  EMPLOYEE = "employee",
+  ADMIN = "admin"
 }

@@ -1,21 +1,22 @@
 import { useState } from "react";
 import * as React from "react";
 import { Button, Input } from "../common";
-import { signIn, signUp } from "../../api";
-import { AxiosResponse } from "axios";
+import { IAuthResponse, ISignUpProps, signIn, signUp } from "../../api";
 
-export type IProps = {
-  onSubmit: (response: AxiosResponse<any, any>) => void
+export interface IProps {
+  onSubmit: (response: IAuthResponse) => void
   type: "signin" | "signup";
-};
+}
+
+export interface IFormData {
+  name?: string,
+  email?: string,
+  password?: string,
+  confirm_password?: string,
+}
 
 export default function AuthForm({ onSubmit, type }: IProps) {
-  const [formData, setFormData] = useState<Record<string, string>>({
-    name: "",
-    email: "",
-    password: "",
-    confirm_password: "",
-  });
+  const [formData, setFormData] = useState<IFormData>({});
 
   const [error, setError] = useState<string | null>(null);
   const isSignup = type === "signup";
@@ -50,9 +51,12 @@ export default function AuthForm({ onSubmit, type }: IProps) {
       return;
     }
 
-    apiAuthFunction(formData).then((response) => {
+    const { confirm_password: _, ...dataToSend } = formData;
+    apiAuthFunction(dataToSend as ISignUpProps).then((response) => {
+      debugger;
       onSubmit(response);
     }).catch((error) => {
+      debugger;
       setError(error.response.data.errors[0]);
       console.error('Error fetching data: ', error.response.data.errors[0]);
       return;
@@ -60,67 +64,41 @@ export default function AuthForm({ onSubmit, type }: IProps) {
   };
 
   const switchFormSection = () => {
-    if (isSignup) {
-      return (
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Already have an account? <a href="/signin" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Login here</a>
-        </p>
-      );
-    } else {
-      return (
-        <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-          Don&apos;t have an account? <a href="/signup" className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">Sign up here</a>
-        </p>
-      );
-    }
-  }
+    const linkText = isSignup ? "Login here" : "Sign up here";
+    const redirectText = isSignup ? "Already have an account?" : "Don’t have an account?";
+    const redirectLink = isSignup ? "/signin" : "/signup";
+
+    return (
+      <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+        {redirectText} <a href={redirectLink} className="font-medium text-cyan-600 hover:underline dark:text-cyan-500">{linkText}</a>
+      </p>
+    );
+  };
+
+  const renderInput = (label: string, name: string, type: string, placeholder: string) => (
+    <Input
+      label={label}
+      id={name}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      value={formData[name]}
+      onChange={handleChange}
+    />
+  );
 
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-      {isSignup && (
-        <Input
-          label="Name"
-          id="name"
-          name="name"
-          placeholder="Name"
-          value={formData.name}
-          onChange={handleChange}
-        />
-      )}
-      <Input
-        label="Email"
-        id="email"
-        name="email"
-        placeholder="name@company.com"
-        value={formData.email}
-        onChange={handleChange}
-      />
-      <Input
-        type="password"
-        label="Password"
-        id="password"
-        name="password"
-        placeholder="••••••••"
-        value={formData.password}
-        onChange={handleChange}
-      />
-      {isSignup && (
-        <Input
-          type="password"
-          label="Confirm Password"
-          id="confirm_password"
-          name="confirm_password"
-          placeholder="••••••••"
-          value={formData.confirm_password}
-          onChange={handleChange}
-        />
-      )}
+      {isSignup && renderInput("Name", "name", "text", "Name")}
+      {renderInput("Email", "email", "email", "name@company.com")}
+      {renderInput("Password", "password", "password", "••••••••")}
+      {isSignup && renderInput("Confirm Password", "confirm_password", "password", "••••••••")}
+      {error && <p className="text-red-500">{error}</p>}
       <Button
         type="submit"
         text={isSignup ? "Create an account" : "Sign in"}
       />
       { switchFormSection() }
-      {error && <p className="text-red-500">{error}</p>}
     </form>
   );
 }
