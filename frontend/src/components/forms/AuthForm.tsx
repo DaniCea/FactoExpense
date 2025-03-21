@@ -1,11 +1,14 @@
 import { useState } from "react";
 import * as React from "react";
+
 import { Button, Input } from "../common";
 import { IAuthResponse, ISignUpProps, signIn, signUp } from "../../api";
+import { AuthType } from "../../common";
+import { ROUTES } from "../../router/routes";
 
 export interface IProps {
   onSubmit: (response: IAuthResponse) => void
-  type: "signin" | "signup";
+  type: AuthType;
 }
 
 export interface IFormData {
@@ -19,7 +22,7 @@ export default function AuthForm({ onSubmit, type }: IProps) {
   const [formData, setFormData] = useState<IFormData>({});
 
   const [error, setError] = useState<string | null>(null);
-  const isSignup = type === "signup";
+  const isSignup = type === AuthType.SIGNUP;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -53,10 +56,8 @@ export default function AuthForm({ onSubmit, type }: IProps) {
 
     const { confirm_password: _, ...dataToSend } = formData;
     apiAuthFunction(dataToSend as ISignUpProps).then((response) => {
-      debugger;
       onSubmit(response);
     }).catch((error) => {
-      debugger;
       setError(error.response.data.errors[0]);
       console.error('Error fetching data: ', error.response.data.errors[0]);
       return;
@@ -66,7 +67,7 @@ export default function AuthForm({ onSubmit, type }: IProps) {
   const switchFormSection = () => {
     const linkText = isSignup ? "Login here" : "Sign up here";
     const redirectText = isSignup ? "Already have an account?" : "Don’t have an account?";
-    const redirectLink = isSignup ? "/signin" : "/signup";
+    const redirectLink = isSignup ? ROUTES.SIGNUP : ROUTES.SIGNIN;
 
     return (
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">

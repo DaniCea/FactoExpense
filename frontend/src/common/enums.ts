@@ -20,3 +20,8 @@ export enum UserType {
   EMPLOYEE = "employee",
   ADMIN = "admin"
 }
+
+export enum AuthType {
+  SIGNIN = "signin",
+  SIGNUP = "signup",
+}
