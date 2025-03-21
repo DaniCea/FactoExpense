@@ -1,13 +1,11 @@
 import { useState, useMemo } from "react";
 import { ChangeEvent, FormEvent } from "react";
-import { format } from "date-fns";
-import { UTCDate } from "@date-fns/utc";
 import { Selector, Input } from "../common";
 import { Button } from "../common";
 import { ExpenseType, TravelExpenseType } from "../../common/enums";
 
 export type IProps = {
-  onSubmit: (formData: Record<string, string>) => void;
+  onSubmit: (formData: IFormData) => void;
 };
 
 export interface IFormData {
@@ -21,6 +19,8 @@ export interface IFormData {
   check_out_date?: string;
   transportation_mode?: string;
   route?: string;
+  expenseType?: ExpenseType | "";
+  travelExpenseType?: TravelExpenseType | "";
 }
 
 export interface IValidationRules {
@@ -93,14 +93,12 @@ const validationRules = {
 };
 
 export default function NewExpenseForm({ onSubmit }: IProps) {
-  const [formData, setFormData] = useState<IFormData>({});
+  const [formData, setFormData] = useState<IFormData>({ expenseType: ExpenseType.REGULAR });
   const [error, setError] = useState<string | null>(null);
-  const [expenseType, setExpenseType] = useState<ExpenseType | "">("");
-  const [travelExpenseType, setTravelExpenseType] = useState<TravelExpenseType | "">("");
 
   const shouldShowButton =
-    (expenseType === ExpenseType.TRAVEL && travelExpenseType) ||
-    (expenseType !== ExpenseType.TRAVEL && expenseType);
+    (formData.expenseType === ExpenseType.TRAVEL && formData.travelExpenseType) ||
+    (formData.expenseType !== ExpenseType.TRAVEL && formData.expenseType);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setError(null);
@@ -109,21 +107,18 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
 
   const handleExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setExpenseType(e.target.value as ExpenseType);
-    setTravelExpenseType("");
-    setFormData({});
+    setFormData({ expenseType: e.target.value as ExpenseType });
   };
 
   const handleTravelExpenseTypeChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setError(null);
-    setTravelExpenseType(e.target.value as TravelExpenseType);
-    setFormData({});
+    setFormData({ expenseType: formData.expenseType, travelExpenseType: e.target.value as TravelExpenseType });
   };
 
   const validateFormData = () => {
     let rules: Record<string, IValidationRules>;
-    if (travelExpenseType) rules = validationRules[expenseType][travelExpenseType]
-    else rules = validationRules[expenseType]
+    if (formData.travelExpenseType) rules = validationRules[formData.expenseType][formData.travelExpenseType]
+    else rules = validationRules[formData.expenseType]
 
     return validateFields(rules);
   };
@@ -161,29 +156,29 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       return;
     }
 
-    onSubmit({ ...formData, expense_type: expenseType, ...(travelExpenseType && { travel_expense_type: travelExpenseType }) });
+    onSubmit(formData);
   };
 
   const visibleFields = useMemo(() => {
     let fieldsToRender: string[] = [];
 
-    if (expenseType === ExpenseType.MILEAGE) {
+    if (formData.expenseType === ExpenseType.MILEAGE) {
       fieldsToRender = fieldConfig.mileage;
-    } else if (expenseType === ExpenseType.REGULAR) {
+    } else if (formData.expenseType === ExpenseType.REGULAR) {
       fieldsToRender = fieldConfig.regular;
-    } else if (expenseType === ExpenseType.TRAVEL && travelExpenseType) {
-      fieldsToRender = fieldConfig.travel[travelExpenseType] || [];
+    } else if (formData.expenseType === ExpenseType.TRAVEL && formData.travelExpenseType) {
+      fieldsToRender = fieldConfig.travel[formData.travelExpenseType] || [];
     }
 
     return fieldsToRender;
-  }, [expenseType, travelExpenseType]);
+  }, [formData.expenseType, formData.travelExpenseType]);
 
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-5">
         <Selector
           label="Expense Type"
-          value={expenseType}
+          value={formData.expenseType}
           onChange={handleExpenseTypeChange}
           id="expense_type"
           placeholder="Select an expense type"
@@ -191,11 +186,11 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
         />
       </div>
 
-      {expenseType === ExpenseType.TRAVEL && (
+      {formData.expenseType === ExpenseType.TRAVEL && (
         <div className="mb-5">
           <Selector
             label="Travel Expense Type"
-            value={travelExpenseType}
+            value={formData.travelExpenseType}
             onChange={handleTravelExpenseTypeChange}
             id="travel_expense_type"
             placeholder="Select travel expense type"
@@ -216,7 +211,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
 
         return (
           <div className="mb-5" key={field}>
-            {field === "amount" && expenseType !== "mileage" ? (
+            {field === "amount" && formData.expenseType !== "mileage" ? (
               <Input type="number" min="0.00" step="0.01" {...commonProps} />
             ) : field === "mileage_in_km" ? (
               <Input type="number" min="0" {...commonProps} />

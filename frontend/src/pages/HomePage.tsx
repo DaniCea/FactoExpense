@@ -8,9 +8,10 @@ import { useNavigate } from "react-router";
 import { Button, Input, Selector } from "../components/common";
 import ExpenseList from "../components/ExpenseList";
 import { ExpenseStatus } from "../common/enums";
+import { Expense } from "../models/Expense";
 
 function HomePage() {
-  const [expenses, setExpenses] = useState([]);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
   const [filters, setFilters] = useState({
     status: null,
@@ -29,8 +30,9 @@ function HomePage() {
   console.log('MAX DATE: ' + maxDate);
 
   useEffect(() =>{
-    getExpenses(filters).then((response) => {
-      setExpenses(response.data);
+    getExpenses(filters).then((expenses) => {
+      setExpenses(expenses);
+      console.log(expenses);
     }).catch((error) => {
       console.error('Error fetching data: ', error);
     });
@@ -65,7 +67,7 @@ function HomePage() {
             </div>
           </div>
           <div className="w-full max-h-[75vh] overflow-y-auto mt-5">
-            <ExpenseList expenses={expenses}></ExpenseList>
+            <ExpenseList expenses={ expenses }></ExpenseList>
           </div>
         </div>
       </section>
