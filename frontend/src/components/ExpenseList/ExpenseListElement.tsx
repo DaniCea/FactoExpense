@@ -3,10 +3,10 @@ import { useMemo, useState } from "react";
 import { format } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
 
-import { PlaneIcon, GasIcon, HotelIcon, ExpenseIcon } from "../icons";
-import { ExpenseType, TravelExpenseType, ExpenseStatus } from "../common";
-import { Selector } from "./common";
-import { Expense } from "../models/Expense";
+import { PlaneIcon, GasIcon, HotelIcon, ExpenseIcon } from "../../icons";
+import { ExpenseType, TravelExpenseType, ExpenseStatus } from "../../common";
+import { Selector } from "../common";
+import { Expense } from "../../models/Expense";
 
 interface IExpenseListProps {
   expense: Expense;

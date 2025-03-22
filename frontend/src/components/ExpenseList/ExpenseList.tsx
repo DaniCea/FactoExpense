@@ -1,10 +1,10 @@
 import useAuthUser from "react-auth-kit/hooks/useAuthUser";
 
 import ExpenseListElement, { IExpenseListStatusProps } from "./ExpenseListElement";
-import { updateExpenseStatus } from "../api";
-import { Expense } from "../models/Expense";
-import { User } from "../models/User";
-import { UserType } from "../common";
+import { updateExpenseStatus } from "../../api";
+import { Expense } from "../../models/Expense";
+import { User } from "../../models/User";
+import { UserType } from "../../common";
 
 interface IExpenseListProps {
   expenses: Expense[];

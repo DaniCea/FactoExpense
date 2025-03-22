@@ -2,10 +2,10 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 
 import { getExpenses } from "../api";
-import { ExpenseList } from "../components";
+import { ExpenseList, ExpenseListFilters } from "../components";
 import { Expense } from "../models/Expense";
 import { GreyBackgroundLayout } from "./layouts";
-import ExpenseListFilters, { IExpenseListFilters } from "../components/ExpenseListFilters";
+import { IExpenseListFilters } from "../components/ExpenseList/ExpenseListFilters";
 
 function HomePage() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
