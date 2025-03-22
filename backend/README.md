@@ -32,7 +32,13 @@ This will execute the init.sql script located in the config/db/ directory to set
 
 ## Testing
 
-To run tests for the backend, use the following command:
+Before running the tests, make sure the test database is set up:
+
+```sh
+RAILS_ENV=test bin/rails db:prepare
+```
+
+Then, to execute the tests:
 
 ```sh
 bin/rails test
