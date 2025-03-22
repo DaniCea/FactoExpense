@@ -53,6 +53,8 @@ This project aims to be simple and compact. However, there are several improveme
 - Improve mobile responsiveness for a better user experience on small screens.
 - Better control over the From / To `ExpenseListFilters` component.
 - Add JSDocs to all classes and methods.
+- Include intl and control content strings.
+- Minimize code.
 - Complete unit testing for components, forms, and pages. [Example of tested component](./frontend/src/components/forms/NewExpenseForm/NewExpenseForm.test.tsx).
 
 ### Backend
