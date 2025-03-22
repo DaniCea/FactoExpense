@@ -67,7 +67,7 @@ export default function AuthForm({ onSubmit, type }: IProps) {
   const switchFormSection = () => {
     const linkText = isSignup ? "Login here" : "Sign up here";
     const redirectText = isSignup ? "Already have an account?" : "Don’t have an account?";
-    const redirectLink = isSignup ? ROUTES.SIGNUP : ROUTES.SIGNIN;
+    const redirectLink = isSignup ? ROUTES.SIGNIN : ROUTES.SIGNUP;
 
     return (
       <p className="text-sm font-light text-gray-500 dark:text-gray-400">

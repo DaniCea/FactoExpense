@@ -1,24 +1,29 @@
-# README
+# FactoExpense frontend
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Prerequisites
 
-Things you may want to cover:
+- Ruby 
+- Rails 8
+- MySQL 8 running at the default port
 
-* Ruby version
+## Database Setup
 
-* System dependencies
+Generates the necessary user and databases
 
-* Configuration
+```sh
+mysql -u root -p < ../config/db/init.sql
+```
 
-* Database creation
+## Installation
 
-* Database initialization
+```sh
+bundle install
+bin/rails s
+```
 
-* How to run the test suite
+## Testing
 
-* Services (job queues, cache servers, search engines, etc.)
+```sh
+bin/rails test
+```
 
-* Deployment instructions
-
-* ...
