@@ -27,15 +27,12 @@
 threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
-# Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-port ENV.fetch("PORT", 3000)
-
 # Enable SSL if the key and cert exist
-if File.exist?("/app/config/ssl/server.key") && File.exist?("/app/config/ssl/server.crt") # TODO: Set from the environment variable
-  ssl_bind "0.0.0.0", "443", key: "/app/config/ssl/server.key", cert: "/app/config/ssl/server.crt"
+if File.exist?("config/ssl/server.key") && File.exist?("config/ssl/server.crt")
+  ssl_bind "0.0.0.0", "3000", key: "config/ssl/server.key", cert: "config/ssl/server.crt"
   puts "✅ Puma running with SSL on port 443"
 else
-  puts "⚠️ SSL certificate or key not found. Running without HTTPS."
+  puts "⚠️ SSL certificate or key not found. FactoExpense requires SSL to work."
 end
 
 # Allow puma to be restarted by `bin/rails restart` command.
