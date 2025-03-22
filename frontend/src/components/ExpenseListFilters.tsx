@@ -63,7 +63,6 @@ export default function ExpenseListFilters({ onChange }: IExpenseListProps) {
       <Input
         type="date"
         max={maxDate}
-        min={filters.from}
         label="To"
         name="to"
         id="to"

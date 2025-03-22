@@ -1,21 +1,17 @@
-import { format, parseISO  } from "date-fns";
 import { UTCDate } from "@date-fns/utc";
 
-import { Expense, TravelData, MileageData, AccommodationData, TransportationData } from "../../models/Expense";
-import {ExpenseStatus, ExpenseType, TravelExpenseType} from "../../common/enums";
-import { IGetExpensesResponseParams } from "../expenses"; // adjust the import path accordingly
-
-const parseDate = (dateStr: string): Date => parseISO(dateStr);
+import { Expense, TravelData, MileageData } from "../../models/Expense";
+import {ExpenseStatus, ExpenseType, TravelExpenseType} from "../../common";
+import { IGetExpensesResponseParams } from "../expenses";
 
 export const serializeExpense = (response: IGetExpensesResponseParams): Expense => {
-  // Serialize the expense object
   const expense: Expense = {
     id: response.id,
     title: response.title,
     amount: response.amount,
     status: mapExpenseStatus(response.status),
     description: response.description,
-    created: parseDate(response.created_at),
+    created: new UTCDate(response.created_at),
     expenseType: mapExpenseType(response.expenseable_type),
     travel: response.expenseable?.travel_expense ? mapTravelData(response.expenseable.travel_expense) : undefined,
     mileage: response.expenseable?.mileage_expense ? mapMileageData(response.expenseable.mileage_expense) : undefined,
@@ -24,7 +20,6 @@ export const serializeExpense = (response: IGetExpensesResponseParams): Expense 
   return expense;
 };
 
-// Helper function to map status string to the ExpenseStatus enum
 const mapExpenseStatus = (status: string): ExpenseStatus => {
   switch (status) {
     case 'pending':
@@ -64,8 +59,8 @@ const mapTravelData = (travelExpense: IGetExpensesResponseParams['expenseable'][
     travelData.travelType = TravelExpenseType.ACCOMMODATION;
     travelData.accommodation = {
       hotelName: travelExpense.travel_expenseable.accommodation_travel_expense?.hotel_name || "",
-      checkinDate: parseDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_in_date),
-      checkoutDate: parseDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_out_date)
+      checkinDate: new UTCDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_in_date),
+      checkoutDate: new UTCDate(travelExpense.travel_expenseable.accommodation_travel_expense?.check_out_date)
     };
   }
 

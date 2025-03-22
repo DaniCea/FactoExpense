@@ -1,7 +1,8 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
+
 import NewExpenseForm from "./NewExpenseForm";
-import { ExpenseType, TravelExpenseType } from "../../../common/enums";
+import { ExpenseType, TravelExpenseType } from "../../../common";
 import "@testing-library/jest-dom/vitest";
 
 // Mock form submission function

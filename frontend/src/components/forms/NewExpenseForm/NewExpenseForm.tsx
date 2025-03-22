@@ -98,10 +98,10 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
   const [formData, setFormData] = useState<IFormData>({ expenseType: ExpenseType.REGULAR });
   const [error, setError] = useState<string | null>(null);
 
-  const shouldShowButton =
+  const shouldShowButton = !!(
     (formData.expenseType === ExpenseType.TRAVEL && formData.travelExpenseType) ||
-    (formData.expenseType !== ExpenseType.TRAVEL && formData.expenseType);
-
+    (formData.expenseType !== ExpenseType.TRAVEL && formData.expenseType)
+  );
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setError(null);
     setFormData({ ...formData, [e.target.name]: e.target.value === '' ? null : e.target.value });
@@ -203,7 +203,7 @@ export default function NewExpenseForm({ onSubmit }: IProps) {
       })}
 
       {error && <p className="text-red-500 mb-5">{error}</p>}
-      <Button type="submit" text="Add New Product" disabled={!shouldShowButton} />
+      {shouldShowButton && <Button type="submit" text="Add New Product" />}
     </form>
   );
 }
