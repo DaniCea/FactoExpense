@@ -7,6 +7,7 @@ export const serializeNewExpenseBody = (formData: IFormData): ICreateExpenseBody
     amount: Number(formData.amount) || undefined,
     expense_type: formData.expenseType || "",
     travel_expense_type: formData.travelExpenseType || undefined,
+    trip_id: Number(formData.tripId) || undefined,
     description: formData.description || undefined,
     hotel_name: formData.hotelName || undefined,
     check_in_date: formData.checkinDate || undefined,

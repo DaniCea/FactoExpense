@@ -52,6 +52,7 @@ export interface ICreateExpenseBody {
   amount: number;
   expense_type: string;
   travel_expense_type?: string;
+  trip_id?: number;
   description?: string;
   hotel_name?: string;
   check_in_date?: string;
