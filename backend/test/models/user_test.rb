@@ -45,7 +45,6 @@ class UserTest < ActiveSupport::TestCase
     assert_not @user.valid?
   end
 
-  # Test role assignment
   test "should have default role as employee" do
     assert_equal "employee", @user.role
   end
@@ -55,7 +54,6 @@ class UserTest < ActiveSupport::TestCase
     assert @user.valid?
   end
 
-  # Test password security
   test "should authenticate with correct password" do
     @user.save
     assert @user.authenticate("password123")

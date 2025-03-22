@@ -1,7 +1,7 @@
 require "test_helper"
 
 class AuthControllerTest < ActionDispatch::IntegrationTest
-  fixtures :users, :tenants  # Make sure tenants are included in the fixtures
+  fixtures :users, :tenants
 
   # POST /signup
   test "should sign up a user and return a JWT token" do
