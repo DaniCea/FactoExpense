@@ -44,6 +44,23 @@ Once the application is running, you can access it via https://localhost:5173/. 
 
 All users created via the signup form will default to **Tenant 1**.
 
+## Testing
+
+You can run tests within the Docker environment or locally.
+
+In the backend:
+```sh
+cd backend/
+bin/rails db:prepare
+bin/rails test
+```
+
+In the frontend:
+```sh
+cd frontend/
+pnpm test
+```
+
 ## Roadmap
 
 This project aims to be simple and compact. However, there are several improvements that can be made to move towards a more production-ready version. Here's a list of potential improvements:

@@ -44,7 +44,7 @@ export default function ExpenseListFilters({ onChange }: IExpenseListProps) {
       <Selector
         label="Status"
         name="status"
-        value={filters.status}
+        value={filters.status || ""}
         onChange={handleFilterChange}
         id="status"
         options={statusOptions.map(opt => opt.value)}
@@ -57,7 +57,7 @@ export default function ExpenseListFilters({ onChange }: IExpenseListProps) {
         name="from"
         id="from"
         placeholder="From Date"
-        value={filters.from}
+        value={filters.from || ""}
         onChange={handleFilterChange}
       />
       <Input
@@ -67,7 +67,7 @@ export default function ExpenseListFilters({ onChange }: IExpenseListProps) {
         name="to"
         id="to"
         placeholder="To Date"
-        value={filters.to}
+        value={filters.to || ""}
         onChange={handleFilterChange}
       />
       <div className="flex items-end">
