@@ -1,11 +1,29 @@
 one:
-  tenant: one
+  tenant: tenant_one
   user: user_tenant_one
+  title: "Hotel stay"
+  description: "Business trip accommodation"
+  amount: 150.00
   status: "pending"
-  expense_type: "regular"
+  expenseable_type: "TravelExpense"
+  expenseable_id: 1
 
 two:
-  tenant: two
+  tenant: tenant_two
   user: user_tenant_two
+  title: "Mileage reimbursement"
+  description: "Travel mileage"
+  amount: 100.00
   status: "accepted"
-  expense_type: "travel"
+  expenseable_type: "MileageExpense"
+  expenseable_id: 1
+
+three:
+  tenant: tenant_one
+  user: user_tenant_one_admin
+  title: "Flight ticket"
+  description: "Flight to client meeting"
+  amount: 300.00
+  status: "rejected"
+  expenseable_type: "TravelExpense"
+  expenseable_id: 2

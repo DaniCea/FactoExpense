@@ -3,18 +3,18 @@ user_tenant_one:
   email: "walter@white.com"
   password_digest: "<%= BCrypt::Password.create('breakingbad') %>"
   tenant_id: 1
-  role: "employee"
+  role: 0
 
 user_tenant_one_admin:
   name: "Hector Salamanca"
   email: "hector@salamanca.com"
   password_digest: "<%= BCrypt::Password.create('dingding') %>"
   tenant_id: 1
-  role: "admin"
+  role: 1
 
 user_tenant_two:
   name: "Jeese Pinkman"
   email: "jeese@pinkman.com"
   password_digest: "<%= BCrypt::Password.create('yeahscience') %>"
   tenant_id: 2
-  role: "employee"
+  role: 0

@@ -1,9 +1,2 @@
 one:
-  expense: one
-  mileage_km: 1.5
-  amount: 1.5
-
-two:
-  expense: two
-  mileage_km: 1.5
-  amount: 1.5
+  mileage_in_km: 1.5

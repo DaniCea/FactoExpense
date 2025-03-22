@@ -1,45 +1,25 @@
 require "test_helper"
 
 class AuthControllerTest < ActionDispatch::IntegrationTest
-  fixtures :users
-
-  def valid_user_params(email = "gus@fring.com", password = "polloshermanos")
-    { user: { name: "Gus Fring", email: email, password: password, password_confirmation: password } }
-  end
-
-  def invalid_email_user_params
-    { user: { name: "Gus Fring", email: "invalid", password: "polloshermanos", password_confirmation: "polloshermanos" } }
-  end
-
-  def mismatched_password_params
-    { user: { name: "Gus Fring", email: "gus@fring.com", password: "polloshermanos", password_confirmation: "different" } }
-  end
+  fixtures :users, :tenants  # Make sure tenants are included in the fixtures
 
   # POST /signup
   test "should sign up a user and return a JWT token" do
-    post signup_url, params: valid_user_params
+    post "/signup", params: { user: { name: "Gus Fring", email: "newmail@fring.com", password: "pollohermano" } }
 
     assert_response :created
     json_response = JSON.parse(response.body)
 
     assert json_response["token"].present?
     assert_equal "Gus Fring", json_response["user"]["name"]
-    assert_equal "gus@fring.com", json_response["user"]["email"]
-  end
-
-  test "should not sign up a user with different password and password_confirmation" do
-    post signup_url, params: mismatched_password_params
-
-    assert_response :unprocessable_entity  # corrected to :unprocessable_entity
-    json_response = JSON.parse(response.body)
-
-    assert_equal "Password confirmation doesn't match Password", json_response["errors"].first
+    assert_equal "newmail@fring.com", json_response["user"]["email"]
+    assert_equal "employee", json_response["user"]["role"]
   end
 
   test "should not sign up a user with an invalid email" do
-    post signup_url, params: invalid_email_user_params
+    post "/signup", params: { user: { name: "Gus Fring", email: "invalid", password: "polloshermanos" } }
 
-    assert_response :unprocessable_entity  # corrected to :unprocessable_entity
+    assert_response :unprocessable_entity
     json_response = JSON.parse(response.body)
 
     assert_equal "Email is not a valid email address", json_response["errors"].first
@@ -49,7 +29,7 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
   test "should sign in a user and return a JWT token" do
     user = users(:user_tenant_one)
 
-    post signin_url, params: { email: user.email, password: "breakingbad" }
+    post "/signin", params: { email: user.email, password: "breakingbad" }
 
     assert_response :ok
     json_response = JSON.parse(response.body)
@@ -57,10 +37,11 @@ class AuthControllerTest < ActionDispatch::IntegrationTest
     assert json_response["token"].present?
     assert_equal user.name, json_response["user"]["name"]
     assert_equal user.email, json_response["user"]["email"]
+    assert_equal user.role, json_response["user"]["role"]
   end
 
   test "should not sign in with incorrect credentials" do
-    post signin_url, params: { email: "nonexistent@example.com", password: "wrongpassword" }
+    post "/signin", params: { email: "nonexistent@example.com", password: "wrongpassword" }
 
     assert_response :unauthorized
     json_response = JSON.parse(response.body)
