@@ -51,7 +51,7 @@ This project aims to be simple and compact. However, there are several improveme
 ### Frontend
 - Add paginaton to the `ExpenseList` component.
 - Improve mobile responsiveness for a better user experience on small screens.
-- Better control over the From / To `ExpenseListFilters` component.
+- Better control over the Date Selectors.
 - Add JSDocs to all classes and methods.
 - Include intl and control content strings.
 - Minimize code.
