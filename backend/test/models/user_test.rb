@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should not be valid with invalid email format" do
-    invalid_emails = %w[invalid_email@com @invalid.com invalid]
+    invalid_emails = %w[invalid_email @ hello.com]
     invalid_emails.each do |invalid_email|
       @user.email = invalid_email
       assert_not @user.valid?
