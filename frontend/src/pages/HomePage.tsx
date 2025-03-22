@@ -18,7 +18,6 @@ function HomePage() {
   useEffect(() =>{
     getExpenses(filters).then((expenses) => {
       setExpenses(expenses);
-      console.log(expenses);
     }).catch((error) => {
       console.error('Error fetching data: ', error);
     });
